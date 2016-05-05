@@ -12,7 +12,11 @@
 ### version 155b    :: renamed "constructor___ship_button_command" to "constructor___ship_select_command"
 ### version 155c    :: removed all images and image references  ;;;  made briefing screen less colourful and fewer borders
 
-### changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED 
+### version 156     :: changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED
+### version 157     :: deleted "linux" switch
+
+##############################      version 157
+
 from __future__ import division
 
 import pygame
@@ -35,7 +39,7 @@ import Tkinter
 
 INCLUDE_IMAGES = 'no'
 DEBUG_MODE = 'no'
-linux = 'no'
+
 
 
 pygame.init ()
@@ -130,7 +134,7 @@ screen = pygame.display.set_mode((SCREEN_X, SCREEN_Y),)  ###         , pygame.FU
 
 
 SCREEN_SPLIT = SCREEN_X - 400
-if linux == 'yes' : SCREEN_SPLIT = SCREEN_X - 300 
+
 SCREEN_SPLIT_Y = 400 
 LEFT_LIMIT = 1
 RIGHT_LIMIT = SCREEN_SPLIT
@@ -1470,8 +1474,7 @@ class top_right_window (window):
     def second_init (self):
         self.x_seize = 340
         self.y_seize = 400
-        if linux == 'yes' :
-            self.y_seize = 300 
+       
         self.position = (SCREEN_X - self.x_seize, 0) 
 
     
@@ -1500,8 +1503,7 @@ class bottom_right_window (window):
     def second_init (self):
         self.x_seize = 340
         self.y_seize = 400
-        if linux == 'yes':
-            self.y_seize = 300 
+        
         self.colour = GREEN 
 
         self.position = (SCREEN_X - self.x_seize, SCREEN_Y - self.y_seize)
