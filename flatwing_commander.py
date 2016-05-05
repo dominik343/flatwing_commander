@@ -58,54 +58,6 @@ clock = pygame.time.Clock ()
 
 
 
-### to do :
-
-#       
-#   
-#       
-
-#
-#
-
-###     new ships
-#       vessel type: Defense Drone
-#    
-
-
-
-
-###     needs refactoring:
-
-#       missions => mission creation => fighter creation => ship creation
-#       keyboard input !!! !!! !!! 
-
-#   
-
-##      Bugs:
-
-#       Wingmen schießen Raketen auf Spieler
-#       Zielmarkierung wird im Radarbereich angezeigt
-
-
-#####       Implemented / Done ::
-#       Möglichkeit, die Position des eigenen Schiffes an den linken Rand zu versetzen
-#       Anzeige Missionsziele
-
-
-
-
-### neu in version 57:
-# hinzufuegen einer verfeinerten Steuerung: a = hart links, s = leicht links, d = leicht rechts, f = hart rechts
-# log mode auch für raketen + geschosse
-### neu in version 59:
-### neu in version 60: Fadenkreuz - Balken eingeführt
-### neu in version 61: sterne werden nicht mehr im linken und rechten Rand generiert, und werden neu geschaffen, sobald sie diesen Rand betreten
-### neu in version 62: raketen haben einen cooldown
-# gegener schießen raketen (keine hs)
-# Broadaxe bomber
-
-
-
 
 try:
     import ctypes
