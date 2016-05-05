@@ -39,6 +39,7 @@ alt + s 	activate shield supercharge (kills your shields; after 10 seconds you b
 alt + q 	end mission
 
 alt + 0-9 	autopilot to nav point with the respective number 
+t		switch target 
 
 
 

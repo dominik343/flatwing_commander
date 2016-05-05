@@ -10,7 +10,9 @@
 ### version 155     :: solved bug: custom mission screen > most of the display buttons did not work
 ### version 155a    :: custom mission screen: added ship details to display
 ### version 155b    :: renamed "constructor___ship_button_command" to "constructor___ship_select_command"
-### version 155c    :: removed all images and image references  ;;;  made briefing screen less colourful and fewer borders 
+### version 155c    :: removed all images and image references  ;;;  made briefing screen less colourful and fewer borders
+
+### changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED 
 from __future__ import division
 
 import pygame
@@ -2963,7 +2965,7 @@ class ship (object):
         if 'team' in wargs: self.team = wargs.get ('team')
         if self.team == 0 and self.player == 1: self.colour = GOLD
         if self.team == 0 and self.player == 0: self.colour = BLUE
-        if self.team == 1: self.colour = ORANGE
+        if self.team == 1: self.colour = RED
         self.vorhalt_direction = 0
         
         self.shield_supercharge = 0
@@ -4134,7 +4136,7 @@ class ship (object):
         if self.stealthed == 'no':
 
            
-            self.draw_ship_polygon (surface = surface, colour = WHITE, shrink_factor = shrink_factor, input_polygon = self.graphics [1], position = vadd (self.radar_position, middle)) 
+            self.draw_ship_polygon (surface = surface, colour = self.colour, shrink_factor = shrink_factor, input_polygon = self.graphics [1], position = vadd (self.radar_position, middle)) 
                 
 
             x,y = self.radar_position 
