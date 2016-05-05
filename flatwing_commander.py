@@ -14,8 +14,9 @@
 
 ### version 156     :: changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED
 ### version 157     :: deleted "linux" switch
+### version 158     :: changed player ship colour to White ;;; added function : "complete_half_ship"  ;;; changed Drahlthi ship model ;;; changed Talon ship model 
 
-##############################      version 157
+##############################      version 158
 
 from __future__ import division
 
@@ -345,6 +346,13 @@ MISSILE_DAMAGE_MATRIX = {
     }
 
 
+def complete_half_ship (input_list):  ### ship graphics : takes the left side of the ship graphic dots and adds the symmetric right half 
+    reversed_list = input_list [::-1]
+
+    mirror_points = [ (-x [0], x [1]) for x in reversed_list ]
+
+    return input_list + mirror_points
+
 
 
 
@@ -354,7 +362,7 @@ MISSILE_DAMAGE_MATRIX = {
 SALTHI = {'name': 'salthi', 'movement': (70,70,2,170), 'sas': [[2,1,1,1],[2,1,1,1],[1],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', (  (-2.5, -4), (-6.5,-1), (-6.5,1), (-2.5,-1), (-2.5,2), (-1.5, 4), (1.5,4), (2.5,2), (2.5, -1), (6.5,1), (6.5, -1), (2.5, -4)   )], 'hitbox':  ['standart', 3], 'turrets': [], 'ship_class': 'fighter', 'description': 'Very fast and maneuverable, extremely fragile' }
 
 
-DRAHLTI = {'name': 'drahlti', 'movement': (50,50,2,120), 'sas': [[6,4,4,4],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'the Empire\' s standart light fighter. Has a lower turn rate than the hornet, but stronger shields.'}
+DRAHLTI = {'name': 'drahlti', 'movement': (50,50,2,120), 'sas': [[6,4,4,4],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-2,-3), (-4,-2), (-4,0), (-3,2), (-1,3), (-1,1) ])], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'the Empire\' s standart light fighter. Has a lower turn rate than the hornet, but stronger shields.'}
 HORNET = {'name': 'hornet', 'movement': (50,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon',( (0,-4), (-2,-4), (-2,-5), (-3,-5), (-3,-4), (-6,-4), (-1,1), (-3,3), (0,6), (3,3), (1,1), (6,-4), (3,-4), (3,-5), (2,-5), (2,-4))  ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'The Federations standart light fighter ist fast and agile. Its Firepower is not impressive, but enough to get the job done' }
 TIE = {'name': 'tie', 'movement': (30,30,1,50), 'sas': [[0.1,0.1,0.1,0.1],[0.5,0.5,0.5,0.5],[0.1],[0,0,0,0] ], 'guns':  [ (SF_LASER, 3, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-1,3), (-1, - 1),(-2,1), (-1,3), (1,3), (2,1), (1,-1), (1,-3)     )], 'hitbox':  ['standart', 2], 'turrets': [], 'ship_class': 'fighter' , 'decription': 'Micro- Fighter. These tiny spacecraft are just big enough to carry a pilot, engines, and a gun. Slow and fragile, only dangerous in great numbers.' }
 
@@ -389,7 +397,7 @@ KOMET = {'name': 'komet', 'movement': (30,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3]
 
 TEST = {'name': 'test', 'movement': (50,60,2,150), 'sas': [[500,300,300,300],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0,'torpedo_launchers': 2,  'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' }
 
-TALON = {'name': 'talon', 'movement': (50,40,2,120), 'sas': [[3,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'kill_value': 300, 'description': 'Outdated. Fast, but poorly armed and protected'}
+TALON = {'name': 'talon', 'movement': (50,40,2,120), 'sas': [[3,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-3,-6),(-3,-3), (-1,-1), (-1,2), (-2,3), (-2,5), (-1,6) ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'kill_value': 300, 'description': 'Outdated. Fast, but poorly armed and protected'}
 DEMON = {'name': 'demon', 'movement': (35,60,2,100), 'sas': [[5,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (AK_80MM_20S, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ((-4,-6), (-4,-5), (-8,-4), (-8,-2), (-5,-1), (-5,0), (-4,2), (-4,4), (-3,6), (-2,6), (-2,4), (2,4), (2,6), (3,6), (4,4), (4,2), (5,0), (5,-1), (8,-2), (8,-4), (4, -5), (4,-6) )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'description': 'Outdated. Slow, but more maneuverable than the Talon. The single gun carries only limited ammo'}
 
 SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[8,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile lauchner make up for it' }
@@ -2965,7 +2973,7 @@ class ship (object):
         self.stealthed_deactivation_timer = - 100
         self.team = 0
         if 'team' in wargs: self.team = wargs.get ('team')
-        if self.team == 0 and self.player == 1: self.colour = GOLD
+        if self.team == 0 and self.player == 1: self.colour = WHITE
         if self.team == 0 and self.player == 0: self.colour = BLUE
         if self.team == 1: self.colour = RED
         self.vorhalt_direction = 0
