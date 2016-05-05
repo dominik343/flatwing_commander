@@ -15,7 +15,8 @@
 ### version 156     :: changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED
 ### version 157     :: deleted "linux" switch
 ### version 158     :: changed player ship colour to White ;;; added function : "complete_half_ship"  ;;; changed Drahlthi ship model ;;; changed Talon ship model 
-### version 159     :: added ship model: Dragon Missile Boat 
+### version 159     :: added ship model: Dragon Missile Boat
+### version 160     :: custom mission: when player ship has been selected, player-enemy-wingman - radiobutton automatically switches to 'enemy' 
 
 ##############################      version 159
 
@@ -7000,8 +7001,6 @@ while running_outer:
                 
                 party = pwe.get ()
                 player = 0
-                print 'test 26.000   ', party
-                print 'test 26.400  ', party in ['player', 'wingman', 'enemy']
                 if party == 'player':
                     player = 1
                     position = MIDDLE
@@ -7017,8 +7016,10 @@ while running_outer:
                     print 'test 26.300' , position 
                     
                 custom_mission ['ships'].append  ( [player, ship, position , team, {'pilot_quality': quality_selector.get ()} ] )
-                for s in custom_mission ['ships']:
-                    print s [1] ['name']
+                if party == 'player':
+                    pwe.set ('enemy')
+
+                
                 right_meta_frame_container.update ()
                 # right_meta_frame.update () 
 
