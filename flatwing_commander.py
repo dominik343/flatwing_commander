@@ -15,8 +15,9 @@
 ### version 156     :: changed Radar Colour to self.colour  ;;; changed enemy colour from Orange to RED
 ### version 157     :: deleted "linux" switch
 ### version 158     :: changed player ship colour to White ;;; added function : "complete_half_ship"  ;;; changed Drahlthi ship model ;;; changed Talon ship model 
+### version 159     :: added ship model: Dragon Missile Boat 
 
-##############################      version 158
+##############################      version 159
 
 from __future__ import division
 
@@ -331,7 +332,7 @@ SABRE = {'name': 'sabre', 'movement': (40,40,2,100), 'sas': [[15,8,15,8],[10,10,
                   'right_area': 1.57}], 'ship_class': 'bomber',
          'description': 'Light Bomber'}
 
-SCYLLA = {'name': 'scylla', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 4), (OLD_LASER, 5, 3),(OLD_LASER, 5, 2), (OLD_LASER, 8, 1),(OLD_LASER, 8, 0), (OLD_LASER, 8, -1) ], 'missile_launchers': 0, 'torpedo_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [(OLD_LASER,-2),(OLD_LASER,-1),(OLD_LASER,0),(OLD_LASER,1)],
+SCYLLA = {'name': 'scylla', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 4), (OLD_LASER, 5, 3),(OLD_LASER, 5, 2), (OLD_LASER, 8, 1),(OLD_LASER, 8, 0), (OLD_LASER, 8, -1) ], 'missile_launchers': 0, 'torpedo_launchers': 0, 'graphics': ['polygon', [ (-5,-10), (-11,-5),(-8,0), (-8,6), (-6,8), (-4,6),(-4,3),(-2,2),(-2,0),(1,0),(1,2),(2,3),(7,3),(9,0),(9,-3),(6,-10)      ]], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [(OLD_LASER,-2),(OLD_LASER,-1),(OLD_LASER,0),(OLD_LASER,1)],
                   'vertical_position': 0,
                   'horizontal_position': - 5,
                   'alignment': 4.71,
@@ -553,7 +554,7 @@ DRAGON = { 'name': 'dragon gunboat',
                   'right_area': 1.6},
                 ],
              'hitbox': ['standart', 10],
-             'graphics': ['polygon', (      (-6,-10), (-9,-8), (-8, -3), (-3,2), (-4,5), (-4,9), (-2, 11), (2,11), (4,9), (4,3), (3,2), (8,-3), (9, -8), (6, -10)         )],  ### (          (-4,-10),(-6,-9),(-6,-6),(-5,-4),(-3,-2),(-1,-1),(-1,1),(-2,5),(-2,7),(-1,10),(1,10),(2,7),(2,5),(1,1),(1,-1),(3,-2),(5,-4),(6,-6),(6,-9),(4,-10)        )
+             'graphics': ['polygon', complete_half_ship ([ (-4,-8),(-4,-10),(-9,-10),(-12,-8),(-12,-2),(-10,1),(-10,4),(-7,4),(-4,2),(-4,6),(-2,8)  ])],  ### (          (-4,-10),(-6,-9),(-6,-6),(-5,-4),(-3,-2),(-1,-1),(-1,1),(-2,5),(-2,7),(-1,10),(1,10),(2,7),(2,5),(1,1),(1,-1),(3,-2),(5,-4),(6,-6),(6,-9),(4,-10)        )
              'ship_class': 'bomber' ,
            'description': 'Missile Boat'}
 
