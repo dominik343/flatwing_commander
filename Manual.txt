@@ -19,8 +19,8 @@ Space 		fire guns
 
 B 		fire dumbfire missile 
 C		fire heavy dumbfire missile 
-N 		fire radar guided missile
-M 		fire heat-seeking missile
+N 		fire radar guided missile  (at selected target) 
+M 		fire heat-seeking missile (at selected target)
 , 		fire micro-missile swarm 
 . 		fire torpedo 
 
@@ -39,7 +39,8 @@ alt + s 	activate shield supercharge (kills your shields; after 10 seconds you b
 alt + q 	end mission
 
 alt + 0-9 	autopilot to nav point with the respective number 
-t		switch target 
+t		select target 
+p		pause 
 
 
 

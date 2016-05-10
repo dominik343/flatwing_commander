@@ -17,8 +17,14 @@
 ### version 158     :: changed player ship colour to White ;;; added function : "complete_half_ship"  ;;; changed Drahlthi ship model ;;; changed Talon ship model 
 ### version 159     :: added ship model: Dragon Missile Boat
 ### version 160     :: custom mission: when player ship has been selected, player-enemy-wingman - radiobutton automatically switches to 'enemy' 
-
-##############################      version 159
+### version 160a    :: removed nonfunctional Buttons from Main Menu
+### version 160b    :: added ship model: SHRIKE
+### version 160c    :: changed function "complete half ship" to eliminate points that are doubles
+### version 160d    :: de-coloured debriefing screen
+### version 160e    :: changed MESSERSCHMIDT Model
+### version 160f    :: enlarged target_brackets by factor 1.5
+### version 160g    :: Custom_Mission_Menus: small improvements 
+##############################      
 
 from __future__ import division
 
@@ -305,7 +311,18 @@ def complete_half_ship (input_list):  ### ship graphics : takes the left side of
 
     mirror_points = [ (-x [0], x [1]) for x in reversed_list ]
 
-    return input_list + mirror_points
+    out_list = input_list + mirror_points
+
+    ### remove double points
+    compare_list = []
+    for p in out_list:
+        if p in compare_list:
+            out_list.remove (p) 
+        compare_list.append (p) 
+
+    return out_list 
+
+
 
 
 
@@ -344,7 +361,7 @@ SCYLLA = {'name': 'scylla', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,
 
 
 
-SHRIKE = {'name': 'shrike', 'movement': (65,30,2,150), 'sas': [[25,15,15,15],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'torpedo_launchers': 1,  'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 6], 'turrets': [], 'ship_class': 'bomber', 'description': 'Hyperspeed Bomber. It can easily outrun any enemy fighter except the salthi' }
+SHRIKE = {'name': 'shrike', 'movement': (65,30,2,150), 'sas': [[25,15,15,15],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'torpedo_launchers': 1,  'graphics': ['polygon', complete_half_ship ([ (-5,-8), (-3,-4), (-3,1), (-4,7),(-2,9), (0,7)  ])], 'hitbox':  ['standart', 6], 'turrets': [], 'ship_class': 'bomber', 'description': 'Hyperspeed Bomber. It can easily outrun any enemy fighter except the salthi' }
 
 
 KOMET = {'name': 'komet', 'movement': (30,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (NEUTRON, 5, -1), (NEUTRON, 5, 1),(NEUTRON, 3, -1), (NEUTRON, 3, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'afterburner_gliding_multiplicator': 2, 'afterburner_activation_modificator': 0.2, 'afterburner_acceleration_modificator': 0.2, 'afterburner_cooldown_modificator': 0.2 , 'description': 'The Komet features an improved afternburner system with reduced acceleration and cooldown time, and increased gliding time. It is designed for gliding drive- by shootings'}
@@ -581,7 +598,7 @@ CHARYBDIS = { 'name': 'charybdis gunboat',
 STRAKHA = {'name': 'Strakha', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[0.1,0.1,0.1,0.1],[4],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'stealth_device': 'yes', 'description': 'Stealth fighter. [press "r" to activate / deactivate stealth]'}
 STRAKHA_N = {'name': 'Strakha N', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[0.1,0.1,0.1,0.1],[4],[0,0,0,0] ], 'guns':  [ (NEUTRON, 5,-1), (NEUTRON, 5,1)], 'missile_launchers': 2, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'stealth_device': 'yes', 'description': 'This Version has Neutron Cannons instead of lasers' }
 
-MESSERSCHMIDT = {'name': 'messerschmidt', 'movement': (80,35,2,220), 'sas': [[5,3,3,3],[4,3,3,3],[3],[0,0,0,0] ], 'guns':  [ (STARFIRE, 5,0) ], 'missile_launchers': 2, 'graphics': ['polygon', ( (0, -3), (-2,-3), (-2,-5), (-5,-5), (-5,2), (-4,4), (-3,4), (-2,2), (-2,0), (-1,2), (-1,8), (0,9), (1,8), (1,2), (2,0), (2,2), (4,3), (4,4), (5,2), (5,-5), (2,-5), (2, -3) )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'radar': 3500, 'description': 'Hyperspeed Interceptor. Build for one Purpose: Kill enemy bombers, as fast as possible' }
+MESSERSCHMIDT = {'name': 'messerschmidt', 'movement': (80,35,2,220), 'sas': [[5,3,3,3],[4,3,3,3],[3],[0,0,0,0] ], 'guns':  [ (STARFIRE, 5,0) ], 'missile_launchers': 2, 'graphics': ['polygon',complete_half_ship ([(-1,-6),(-3,-5),(-5,-1),(-7,-3),(-7,1),(-6,4),(-4,6),(-4,4),(-3,1),(-2,0),(0,2)   ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'radar': 3500, 'description': 'Hyperspeed Interceptor. Build for one Purpose: Kill enemy bombers, as fast as possible' } ### old model: ( (0, -3), (-2,-3), (-2,-5), (-5,-5), (-5,2), (-4,4), (-3,4), (-2,2), (-2,0), (-1,2), (-1,8), (0,9), (1,8), (1,2), (2,0), (2,2), (4,3), (4,4), (5,2), (5,-5), (2,-5), (2, -3) )
 
 
 RAPTOR = {'name': 'raptor', 'movement': (45,50,2,130), 'sas': [[10,7,7,8],[10,8,8,8],[10],[0,0,0,0] ], 'guns':[ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2)], 'missile_launchers': 4 ,'turrets' : [], 'graphics': [ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )],'hitbox': ['standart', 5], 'ship_class': 'fighter', 'description': 'The most powerful fighter on the Battlefield. Nothing short of a capital ship will survive a barrage of its four mass drivers and missile launchers. And it is more agile than the scimitar. '  }
@@ -608,7 +625,8 @@ fed_corvettes = [SABRE, BROADAXE, CHARYBDIS, SHRIKE, DRAGON]
 fed_civs = [DEADMAN]
 
 empire_cap_ships = [RALARI,FRALTHI, SIVAR, MORONIR]
-empire_fighters = [JALTHI,DRAHLTI,STRAKHA,STRAKHA_N, SCYLLA, TIE, SALTHI]
+empire_fighters = [JALTHI,DRAHLTI,STRAKHA,STRAKHA_N, TIE, SALTHI]
+empire_corvettes = [SCYLLA] 
 empire_civs = [MORONIR]
 
 pirate_cap_ships = []
@@ -4558,6 +4576,7 @@ class ship (object):
             try: 
                 for tur in self.turret_ids:
                     turret_list.remove (object_list [tur])
+                    print 'test 3911  , removed turret   ', tur 
             except: pass 
             global global_target_object_id
             global_target_object_id = None 
@@ -6166,7 +6185,7 @@ def mainloop ():
                 explosion_list.remove (e)
 
                 
-        # target_brackets
+       
 
 
 
@@ -6194,9 +6213,9 @@ def mainloop ():
             if global_target_object_id != None:
                 
                 target_coordinates = ship.output_display_position (object_list [global_target_object_id] )
-                if target_coordinates != None and target_coordinates [0] < SCREEN_SPLIT: dfunctions.target_brackets (( int (target_coordinates [0]),int (target_coordinates [1])), ship.output_radius (object_list [global_target_object_id]))
-                # pygame.gfxdraw.aacircle (screen, int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [0]), int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [1]),7, RED)
-                dfunctions.target_brackets ((int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [0]), int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [1])), 7)
+                if target_coordinates != None and target_coordinates [0] < SCREEN_SPLIT: dfunctions.target_brackets (( int (target_coordinates [0]),int (target_coordinates [1])),1.5 *  ship.output_radius (object_list [global_target_object_id]))
+               
+               #  dfunctions.target_brackets ((int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [0]), int (( dfunctions.vadd (SECOND_MIDDLE, ship.output_radar_position ( object_list [global_target_object_id])) ) [1])), 70)
                
 
                 
@@ -6619,21 +6638,21 @@ while running_outer:
         background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
         background.place (x = 0, y = 0 )
 
-        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Debriefing' , border = 10, bg = "blue",  font=("Helvetica", 30))
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Debriefing' , border = 10, bg = ("blue" if DEBUG_MODE == 'yes' else "grey"),  font=("Helvetica", 30))
         title.pack (side = 'top', fill = 'x')
 
         ###         B           Middle Frame
 
-        middle_frame = Tkinter.Frame (frame_0_a, border = 20, bg = 'blue', relief = 'raised' )
+        middle_frame = Tkinter.Frame (frame_0_a, border = 4, bg = ("blue" if DEBUG_MODE == 'yes' else "grey"), relief = 'raised' )
         middle_frame.pack (fill = 'both', expand = 1 )
 
         
         ##              1           Left Subframe
-        middle_frame_left = Tkinter.Frame (middle_frame, border = 20, bg = 'black', relief = 'raised' )
+        middle_frame_left = Tkinter.Frame (middle_frame, border = 4, bg = 'black', relief = 'raised' )
         middle_frame_left.pack  (side = 'left', fill = 'both', expand = 1 )
 
         #                   a           Debriefing Speech 
-        subframe_a = Tkinter.Frame (middle_frame_left, border = 20, bg = 'red', relief = 'raised' )
+        subframe_a = Tkinter.Frame (middle_frame_left, border = 4, bg = ("red" if DEBUG_MODE == 'yes' else "grey"), relief = 'raised' )
         subframe_a.pack (fill = 'both', expand = 0, side = 'left')
 
         ############################################################
@@ -6698,13 +6717,13 @@ while running_outer:
         #####################################################       
         
 
-        subframe_b = Tkinter.Frame (middle_frame_left, border = 20, bg = 'green', relief = 'raised' )
+        subframe_b = Tkinter.Frame (middle_frame_left, border = 4, bg = ("green" if DEBUG_MODE == 'yes' else "grey"), relief = 'raised' )
         subframe_b.pack (fill = 'both', expand = 1, side = 'left')
-        Tkinter.Message (subframe_b, text = create_debriefing_text (current_mission)).pack ()
+        Tkinter.Message (subframe_b,border = 4,  text = create_debriefing_text (current_mission), relief = 'raised').pack ()
 
 
         ##              2           Goal Subframe
-        goal_frame = Tkinter.Frame (middle_frame_left, border = 20, bg = '#f0f', relief = 'raised' )
+        goal_frame = Tkinter.Frame (middle_frame_left, border = 4, bg = ('#f0f' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' )
         goal_frame.pack  (fill = 'both', expand = 1 , side = 'right')
 
         ########################################################################
@@ -6738,7 +6757,7 @@ while running_outer:
                 
             
         #                B          success_level
-        success_frame = Tkinter.Frame (goal_frame, border = 10,bg = 'blue', relief = 'raised')
+        success_frame = Tkinter.Frame (goal_frame, border = 4,bg = 'blue', relief = 'raised')
         success_frame.pack ()
         
 
@@ -6813,7 +6832,7 @@ while running_outer:
     def create_custom_mission_menu ():
         global frame_0_a
 
-        # ship_list_list = add_none_to_list (split_into_sublists (ship_list, 10), 2) 
+      
         
         
 
@@ -6888,7 +6907,7 @@ while running_outer:
                     f = smallframe (self.frame)
                     f.pack (side = 'top', expand = 1, fill = 'x')
                     l = Tkinter.Label (f, text = name, font = head2, border = 3, relief = 'ridge')
-                    l.pack (side = 'top')
+                    l.pack (side = 'top', expand = 1, fill = 'x' )
 
                     for s in custom_mission ['ships']:
 
@@ -6914,7 +6933,7 @@ while running_outer:
         head1 = ("Helvetica", 20)
         head2 = ("Helvetica", 15)
 
-        ##                  1           Selected Ship Display
+     
 
        
         ###         D           Left Top Stuff 
@@ -7164,7 +7183,9 @@ while running_outer:
         l = Tkinter.Label (corvette_frame, text = 'Corvettes', border = 3, relief = 'raised', font = head2 )
         l.pack ()
 
-        turn_ship_list_into_buttons (corvette_frame, fed_corvettes) 
+        turn_ship_list_into_buttons (corvette_frame, fed_corvettes)
+
+        f_spacer ()
         
         
 
@@ -7226,7 +7247,20 @@ while running_outer:
         '''
         e_spacer ()
 
-        #           c           Civil ships
+
+        #           c           Corvettes
+
+        corvette_frame = Tkinter.Frame (left_lower_sub_b, border = 5, relief = 'ridge')
+        corvette_frame.pack ()
+
+        l = Tkinter.Label (corvette_frame, text = 'Corvettes', border = 3, relief = 'raised', font = head2)
+        l.pack ()
+
+        turn_ship_list_into_buttons (corvette_frame, empire_corvettes)
+
+        e_spacer ()
+
+        #           d           Civil ships
 
         civ_frame = Tkinter.Frame (left_lower_sub_b, border = 5, relief = 'ridge')
         civ_frame.pack () 
@@ -7364,10 +7398,10 @@ while running_outer:
             'title': 'Main Menu',
             # 'image' : image_1,
             'buttons': [
-                {'text': 'main_menu' , 'command': lambda : create_menu_screen_2 (menu_dict ['MAIN_MENU']) },
-                {'text': 'tutorial', 'command': lambda : create_menu_screen_2 (menu_dict ['TUTORIAL_MENU']) },
+                # {'text': 'main_menu' , 'command': lambda : create_menu_screen_2 (menu_dict ['MAIN_MENU']) },
+                # {'text': 'tutorial', 'command': lambda : create_menu_screen_2 (menu_dict ['TUTORIAL_MENU']) },
                 {'text': 'custom mission', 'command': lambda : create_custom_mission_menu ()},
-                {'text': 'load saved game', 'command': lambda: print_stuff ('placeholder_1') },
+                # {'text': 'load saved game', 'command': lambda: print_stuff ('placeholder_1') },
                 {'text': 'start campaign', 'command': lambda: create_between_missions_menu () },
                 {'text': 'Exit Game', 'command': lambda: exit_game () }
                 ]
