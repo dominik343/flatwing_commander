@@ -23,7 +23,9 @@
 ### version 160d    :: de-coloured debriefing screen
 ### version 160e    :: changed MESSERSCHMIDT Model
 ### version 160f    :: enlarged target_brackets by factor 1.5
-### version 160g    :: Custom_Mission_Menus: small improvements 
+### version 160g    :: Custom_Mission_Menus: small improvements
+### version 160i    :: added DEMON to Pirate Fighters
+### version 160j    :: split SCYLLA into Empire version and outdated pirate version 
 ##############################      
 
 from __future__ import division
@@ -71,7 +73,7 @@ try:
     import ctypes
     user32 = ctypes.windll.user32
     SCREEN_X = user32.GetSystemMetrics (0)
-    SCREEN_Y = user32.GetSystemMetrics (1)
+    SCREEN_Y = user32.GetSystemMetrics (1) -50
 except:
     SCREEN_X = 1500
     SCREEN_Y = 1100
@@ -248,9 +250,9 @@ NEUTRON = {'name': 'neutron', 'range': 220, 'velocity': 120, 'damage': 4, 'coold
 STARFIRE = {'name': 'starfire', 'range': 800, 'velocity': 500, 'damage': 10, 'cooldown': 4, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': YELLOW, 'shield_piercing': 'yes'}
 PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 8, 'cooldown': 5, 'maximum_load': 2, 'ammo_weapon': 'no', 'colour': RED}
 
-AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 200, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
-AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 300, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
-AM_40 = {'name': 'antimatter 40', 'range': 10000, 'velocity': 400, 'damage': 2000, 'cooldown': 30, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 8}
+AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 150, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
+AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 200, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
+AM_40 = {'name': 'antimatter 40', 'range': 10000, 'velocity': 300, 'damage': 2000, 'cooldown': 30, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 8}
 
 PHASE_TRANSIT = {'name': 'phase transit', 'range': 20000, 'velocity': 1000, 'damage': 20000, 'cooldown': 60, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': MAGENTA, 'antimatter': 'yes', 'display_radius': 12}
 
@@ -350,14 +352,21 @@ SABRE = {'name': 'sabre', 'movement': (40,40,2,100), 'sas': [[15,8,15,8],[10,10,
                   'right_area': 1.57}], 'ship_class': 'bomber',
          'description': 'Light Bomber'}
 
-SCYLLA = {'name': 'scylla', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 4), (OLD_LASER, 5, 3),(OLD_LASER, 5, 2), (OLD_LASER, 8, 1),(OLD_LASER, 8, 0), (OLD_LASER, 8, -1) ], 'missile_launchers': 0, 'torpedo_launchers': 0, 'graphics': ['polygon', [ (-5,-10), (-11,-5),(-8,0), (-8,6), (-6,8), (-4,6),(-4,3),(-2,2),(-2,0),(1,0),(1,2),(2,3),(7,3),(9,0),(9,-3),(6,-10)      ]], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [(OLD_LASER,-2),(OLD_LASER,-1),(OLD_LASER,0),(OLD_LASER,1)],
+SCYLLA = {'name': 'scylla', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (LASER, 5, 4), (LASER, 5, 3),(LASER, 5, 2), (LASER, 8, 1),(LASER, 8, 0), (LASER, 8, -1) ], 'missile_launchers': 0, 'torpedo_launchers': 0, 'graphics': ['polygon', [ (-5,-10), (-11,-5),(-8,0), (-8,6), (-6,8), (-4,6),(-4,3),(-2,2),(-2,0),(1,0),(1,2),(2,3),(7,3),(9,0),(9,-3),(6,-10)      ]], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [(LASER,-2),(LASER,-1),(LASER,0),(LASER,1)],
                   'vertical_position': 0,
                   'horizontal_position': - 5,
                   'alignment': 4.71,
                   'left_area': 1.57,
                   'right_area': 1.57}], 'ship_class': 'bomber',
-          'description': 'The Scylla Gunboat is outdated, but still dangerous. Its quad laser turret covers the entire right hemissphere, but the Scylla is vulnerable to attacks from the left'}
+          'description': 'The Scylla\' s quad laser turret covers the entire right hemissphere, but the Scylla is vulnerable to attacks from the left'}
 
+SCYLLA_P = {'name': 'scylla P', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 4), (OLD_LASER, 5, 3),(OLD_LASER, 5, 2), (OLD_LASER, 8, 1),(OLD_LASER, 8, 0), (OLD_LASER, 8, -1) ], 'missile_launchers': 0, 'torpedo_launchers': 0, 'graphics': ['polygon', [ (-5,-10), (-11,-5),(-8,0), (-8,6), (-6,8), (-4,6),(-4,3),(-2,2),(-2,0),(1,0),(1,2),(2,3),(7,3),(9,0),(9,-3),(6,-10)      ]], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [(OLD_LASER,-2),(OLD_LASER,-1),(OLD_LASER,0),(OLD_LASER,1)],
+                  'vertical_position': 0,
+                  'horizontal_position': - 5,
+                  'alignment': 4.71,
+                  'left_area': 1.57,
+                  'right_area': 1.57}], 'ship_class': 'bomber',
+          'description': 'The Pirates use an outdated version of the Scylla with outdated (shorter range) Weapons'}
 
 
 
@@ -440,7 +449,7 @@ MORONIR =   {'name': 'moronir',
 
 
 RALARI =   {'name': 'ralari',
-              'movement': (20,10,3,0),
+              'movement': (20,5,3,0),
               'sas': [[500,500,500,500],[1000,1000,1000,1000],[500],[0,0,0,0] ],
               'guns':  [ ], 'missile_launchers': 0, 'torpedo_launchers': 10, 
               'graphics': ['polygon', [(-4, -52), (-8, -48), (-8, -28), (-3, -8), (-3, 32), (-7, 40), (-7, 48), (-3, 52), (2, 52), (6, 48), (6, 40), (2, 32), (2, -8), (8, -28), (8, -48), (4, -52)]
@@ -464,7 +473,7 @@ RALARI =   {'name': 'ralari',
                            'z_dimension': 'yes',
                            'left_area': 3,
                            'right_area': 3}],
-             'description': 'Fast and deadly.',
+             'description': 'Destroyer. \n Fast and deadly.',
          
               'ship_class': 'light_capital' }
 
@@ -551,7 +560,7 @@ BROADAXE = { 'name': 'broadaxe',
              'ship_class': 'bomber',
              'description': 'Heavy Bomber. If you want to take out something big, this is the ship for you. It can defend itself against fighters.'}
 
-DRAGON = { 'name': 'dragon gunboat',
+DRAGON = { 'name': 'dragon',
              'movement':(25,20,1,80),
              'sas': [[25,25,25,25],[25,25,25,25],[20],[0,0,0,0] ],
              'guns': [],
@@ -576,7 +585,7 @@ DRAGON = { 'name': 'dragon gunboat',
              'ship_class': 'bomber' ,
            'description': 'Missile Boat'}
 
-CHARYBDIS = { 'name': 'charybdis gunboat',
+CHARYBDIS = { 'name': 'charybdis',
              'movement':(20,20,1,80),
              'sas': [[10,10,10,10],[25,25,25,25],[20],[0,0,0,0] ],
              'guns': [],
@@ -601,10 +610,10 @@ STRAKHA_N = {'name': 'Strakha N', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[
 MESSERSCHMIDT = {'name': 'messerschmidt', 'movement': (80,35,2,220), 'sas': [[5,3,3,3],[4,3,3,3],[3],[0,0,0,0] ], 'guns':  [ (STARFIRE, 5,0) ], 'missile_launchers': 2, 'graphics': ['polygon',complete_half_ship ([(-1,-6),(-3,-5),(-5,-1),(-7,-3),(-7,1),(-6,4),(-4,6),(-4,4),(-3,1),(-2,0),(0,2)   ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'radar': 3500, 'description': 'Hyperspeed Interceptor. Build for one Purpose: Kill enemy bombers, as fast as possible' } ### old model: ( (0, -3), (-2,-3), (-2,-5), (-5,-5), (-5,2), (-4,4), (-3,4), (-2,2), (-2,0), (-1,2), (-1,8), (0,9), (1,8), (1,2), (2,0), (2,2), (4,3), (4,4), (5,2), (5,-5), (2,-5), (2, -3) )
 
 
-RAPTOR = {'name': 'raptor', 'movement': (45,50,2,130), 'sas': [[10,7,7,8],[10,8,8,8],[10],[0,0,0,0] ], 'guns':[ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2)], 'missile_launchers': 4 ,'turrets' : [], 'graphics': [ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )],'hitbox': ['standart', 5], 'ship_class': 'fighter', 'description': 'The most powerful fighter on the Battlefield. Nothing short of a capital ship will survive a barrage of its four mass drivers and missile launchers. And it is more agile than the scimitar. '  }
+RAPTOR = {'name': 'raptor', 'movement': (45,50,2,130), 'sas': [[10,7,8,7],[10,8,8,8],[10],[0,0,0,0] ], 'guns':[ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2)], 'missile_launchers': 4 ,'turrets' : [], 'graphics': [ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )],'hitbox': ['standart', 5], 'ship_class': 'fighter', 'description': 'The most powerful fighter on the Battlefield. Nothing short of a capital ship will survive a barrage of its four mass drivers and missile launchers. And it is more agile than the scimitar. '  }
 RAPTOR_B = copy.deepcopy ( RAPTOR) 
 RAPTOR_B ['name'] = 'raptor B' 
-RAPTOR_B ['guns'] = [ (PARTICLE, 0,1), (PARTICLE, 5,-1), (PARTICLE,5,-1), (PARTICLE, 2,2), (PARTICLE, 2,-2) ] 
+RAPTOR_B ['guns'] = [  (PARTICLE, 5,-1), (PARTICLE,5,-1), (PARTICLE, 2,2), (PARTICLE, 2,-2) ] 
 PSYCHO = { 'name': 'psycho', 'movement': (35,100,6,120), 'sas': [[30,1,1,1],[10,1,1,1],[3],[0,0,0,0] ],'guns': [ (NEUTRON,5,1), (NEUTRON,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)], 'missile_launchers': 0, 'graphics':[ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )], 'hitbox':['standart', 5], 'turrets': [], 'ship_class': 'fighter' }
 
 
@@ -630,7 +639,8 @@ empire_corvettes = [SCYLLA]
 empire_civs = [MORONIR]
 
 pirate_cap_ships = []
-pirate_fighters = [TALON]
+pirate_fighters = [TALON, DEMON]
+pirate_corvettes = [SCYLLA_P] 
 
 neutral_stuff = [LASER_MINE, TARGET_DUMMY]
 
@@ -4264,12 +4274,18 @@ class ship (object):
                 
 
     def process_damage (self, damage, side_t, shield_piercing,firing_ship_id,  **wargs):
-        print 'test 5517  ', shield_piercing
-        if self.shield_supercharge == 2: damage = 0
+        
+        
         if self.mission_id != None:
             new_event = ( self.mission_id, 'hit' )
-            if new_event not in mission_event_list: mission_event_list.append (new_event) 
-        if self.damage == 1: return None 
+            if new_event not in mission_event_list: mission_event_list.append (new_event)
+        
+        if self.damage == 1: return None
+
+        ###         ___ I ___   Preliminaries 
+
+        if self.shield_supercharge == 2: damage = 0
+        
         bullet_type = wargs.get ('bullet_type')
         ion_damage = wargs.get ('ion_damage') 
         if side_t == 'front': side = 0
@@ -4306,7 +4322,7 @@ class ship (object):
                         
             if damage == 0 : break
             
-
+        
         ### if the structure takes damage, the same amount of damage ist applied to internal systems
         if damage > 0:
             system_damage = damage
@@ -6482,7 +6498,7 @@ while running_outer:
 
             
             ###         B       ship name 
-            b = Tkinter.Button (master_frame, text = wargs ['text'], width = 10 )
+            b = Tkinter.Button (master_frame, text = wargs ['text'].capitalize (), width = 10 )
             b.pack (side = 'left')
 
             
@@ -6547,8 +6563,9 @@ while running_outer:
             frame_0_a.pack_forget ()
             frame_0_a.destroy ()
 
-
-        current_mission = campaign_missions [campaign_state] 
+        try: 
+            current_mission = campaign_missions [campaign_state]
+        except: pass 
 
         ###         A           Main Frame + Background 
         frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
@@ -7322,6 +7339,17 @@ while running_outer:
             b = ship_button (root = fighter_frame, text = ship ['name'],  border = 3, relief = 'raised',command = constructor___ship_select_command (ship))
         '''
         p_spacer ()
+
+        #           c       Corvettes
+        corvette_frame = Tkinter.Frame (left_lower_sub_c, border = 5, relief = 'ridge')
+        corvette_frame.pack ()
+
+        l = Tkinter.Label (corvette_frame, text = 'Corvettes', border = 3, relief = 'raised', font = head2 )
+        l.pack ()
+
+        turn_ship_list_into_buttons (corvette_frame, pirate_corvettes)
+
+        
         p_spacer ()
         p_spacer ()
         
