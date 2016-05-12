@@ -25,7 +25,9 @@
 ### version 160f    :: enlarged target_brackets by factor 1.5
 ### version 160g    :: Custom_Mission_Menus: small improvements
 ### version 160i    :: added DEMON to Pirate Fighters
-### version 160j    :: split SCYLLA into Empire version and outdated pirate version 
+### version 160j    :: split SCYLLA into Empire version and outdated pirate version
+### version 161     :: small change to "hit" method: turrets are only hit if the shields are already down or the bullet/missile is shieldbreaking
+### version 161a    :: enhanced HAMMERHEAD's turret hitpoints to 4. 
 ##############################      
 
 from __future__ import division
@@ -250,9 +252,9 @@ NEUTRON = {'name': 'neutron', 'range': 220, 'velocity': 120, 'damage': 4, 'coold
 STARFIRE = {'name': 'starfire', 'range': 800, 'velocity': 500, 'damage': 10, 'cooldown': 4, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': YELLOW, 'shield_piercing': 'yes'}
 PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 8, 'cooldown': 5, 'maximum_load': 2, 'ammo_weapon': 'no', 'colour': RED}
 
-AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 150, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
-AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 200, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
-AM_40 = {'name': 'antimatter 40', 'range': 10000, 'velocity': 300, 'damage': 2000, 'cooldown': 30, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 8}
+AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 100, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
+AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 100, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
+AM_40 = {'name': 'antimatter 40', 'range': 10000, 'velocity': 100, 'damage': 2000, 'cooldown': 30, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 8}
 
 PHASE_TRANSIT = {'name': 'phase transit', 'range': 20000, 'velocity': 1000, 'damage': 20000, 'cooldown': 60, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': MAGENTA, 'antimatter': 'yes', 'display_radius': 12}
 
@@ -395,7 +397,8 @@ HAMMERHEAD = {'name': 'hammerhead',
                            'horizontal_position': 0,
                            'alignment': 1.57,
                            'left_area': 3.14,
-                           'right_area': 3.14}],
+                           'right_area': 3.14,
+                            'hit_points': 4}],
               'ship_class': 'fighter' }
 
 DEADMAN =   {'name': 'deadman',
@@ -540,18 +543,21 @@ BROADAXE = { 'name': 'broadaxe',
                  {'guns': [(LASER,-1), (LASER, 1) ],
                   'vertical_position': -5,
                   'horizontal_position': 10,
+                  'hitpoints': 4,
                   'alignment': 1.57,
                   'left_area': 1.57,
-                  'right_area': 1.57},
+                  'right_area': 1.57,},
                  {'guns': [(LASER,-1), (LASER, 1)],
                   'vertical_position': -5,
                   'horizontal_position': -10,
+                  'hitpoints':4,
                   'alignment': 4.7,
                   'left_area': 1.57,
                   'right_area': 1.57},
                  {'guns': [(LASER,-1), (LASER, 1)],
                   'vertical_position': -10,
                   'horizontal_position': 0,
+                  'hitpoints': 4,
                   'alignment': 3.14,
                   'left_area': 1.57,
                   'right_area': 1.57}],
@@ -4273,7 +4279,7 @@ class ship (object):
                     missile_list.append (m)
                 
 
-    def process_damage (self, damage, side_t, shield_piercing,firing_ship_id,  **wargs):
+    def process_damage (self, damage, side_t, shield_piercing,firing_ship_id,  **wargs): 
         
         
         if self.mission_id != None:
@@ -4457,23 +4463,26 @@ class ship (object):
             if bull.ship_id != self.object_id: 
                 
 
-                damage = bull.damage 
+                damage = bull.damage
+                if self.shield_supercharge == 2: damage = 0 
                 if type (damage).__name__ not in ['int', 'float']: damage = MISSILE_DAMAGE_MATRIX [self.ship_class] [damage]
 
 
                 ### #       ALPHA           turrets
-                for tur in self.turret_ids:
-                    tur = object_list [tur]
-                    if tur.determine_hit (bull, damage) == 1: 
-                        ex = explosion (2, 0, position = bull.display_position , colour = RED)
-                        try:                       
-                            if bull.superclass == 'bullet': bullet_list.remove (bull)
-                            if bull.superclass == 'missile': missile_list.remove (bull)
-                        except:
-                            pass 
 
-                                
-                        break
+                if self.actual_sas [0] [0] == 0 or bull.superclass == 'missile' or bull.shield_piercing == 'yes': 
+                    for tur in self.turret_ids:
+                        tur = object_list [tur]
+                        if tur.determine_hit (bull, damage) == 1: 
+                            ex = explosion (2, 0, position = bull.display_position , colour = RED)
+                            try:                       
+                                if bull.superclass == 'bullet': bullet_list.remove (bull)
+                                if bull.superclass == 'missile': missile_list.remove (bull)
+                            except:
+                                pass 
+
+                                    
+                            break
                                 
                         
                       
@@ -4586,7 +4595,7 @@ class ship (object):
                         
 
 
-        if self.shield_supercharge == 2: self.damage = 0 
+        
         if self.damage == 1:
             global turret_list
             try: 
@@ -6565,7 +6574,7 @@ while running_outer:
 
         try: 
             current_mission = campaign_missions [campaign_state]
-        except: pass 
+        except: current_mission = campaign_missions [1] 
 
         ###         A           Main Frame + Background 
         frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
@@ -6644,9 +6653,9 @@ while running_outer:
             frame_0_a.pack_forget ()
             frame_0_a.destroy ()
 
-
-        current_mission = campaign_missions [campaign_state -1] 
-
+        try: 
+            current_mission = campaign_missions [campaign_state -1] 
+        except: pass 
         ###         A           Main Frame + Background 
         frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
         frame_0_a.pack (side = 'left')
@@ -6916,7 +6925,7 @@ while running_outer:
                 for widget in self.frame.winfo_children ():
                     widget.destroy ()
                     
-                results = Tkinter.Button (self.frame, text = 'selected ships', border = 5, relief = 'ridge' ) # font = head1
+                results = Tkinter.Button (self.frame, text = 'selected ships', border = 5, relief = 'ridge', font=("Helvetica", 20) ) # font = head1
                 results.pack (side = 'top')
                
                 for name in ['player', 'wingmen', 'enemy' ]:
