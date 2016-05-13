@@ -27,7 +27,8 @@
 ### version 160i    :: added DEMON to Pirate Fighters
 ### version 160j    :: split SCYLLA into Empire version and outdated pirate version
 ### version 161     :: small change to "hit" method: turrets are only hit if the shields are already down or the bullet/missile is shieldbreaking
-### version 161a    :: enhanced HAMMERHEAD's turret hitpoints to 4. 
+### version 161a    :: enhanced HAMMERHEAD's turret hitpoints to 4.
+### version 162b    :: mission_running now has values '0' for 'no', ;; '1' for 'campaign_mission' ;; '2' for 'custom_mission'    ;;;; >>> solved the bugs : 1) Campaign Debriefing for Custom Missions , 2) Campaign count increased by playing custom missions 
 ##############################      
 
 from __future__ import division
@@ -236,7 +237,7 @@ PILOT_QUALITY = {'ace': [0,0], 'excellent' : [0.1, 1 ], 'good' : [0.2,3], 'avera
 
 
 
-### Definition der Waffen
+### Definition of Weapons
 
 
 TOKEN = {'name': 'token', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 0, 'ammo_weapon': 'no', 'colour': ORANGE}
@@ -1599,7 +1600,7 @@ class middle_right_window (window):
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
             #       afteburner
             self.aft.update ([(ship.output_afterburner_delay_counter (object_list [1]) / (object_list [1]).AFTERBURNER_ACTIVATION_TIME ), (ship.output_afterburner_delay_counter (object_list [1]) / (object_list [1]).AFTERBURNER_ACCELERATION_TIME ),(ship.output_afterburner_delay_counter (object_list [1])) / ship.output_AFTERBURNER_GLIDING_TIME (object_list [1] ),(ship.output_AFTERBURNER_COOLDOWN (object_list [1]) / (object_list [1]).AFTERBURNER_COOLDOWN ), ship.output_afterburner_activation (object_list [1]) ], {'expand_x': self.x_seize - 36})
@@ -1660,7 +1661,7 @@ class window_4 (window):  #     Energy, Gliding, Booster
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
 
         #       energy_points 
@@ -1729,7 +1730,7 @@ class window_5 (window): ### player_shields + speed
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
             
 
@@ -1792,7 +1793,7 @@ class window_6 (window): # target shields and stuff
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
             if global_target_object_id != None:
                 s = object_list [global_target_object_id]
@@ -1859,7 +1860,7 @@ class window_7 (window): # missiles and torpedos
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
             s = object_list [1]
             self.m.update ([ s.output_missile_cooldowns (), MISSILE_COOLDOWN ], {})
@@ -1907,7 +1908,7 @@ class window_8 (window): # killed ships list
             frame.fill (BLACK)
 
 
-        if mission_running == 1:
+        if mission_running in [1,2]:
 
            
             self.k.update ([ killed_ship_list, 300, WHITE], {})
@@ -4470,8 +4471,9 @@ class ship (object):
 
                 ### #       ALPHA           turrets
 
-                if self.actual_sas [0] [0] == 0 or bull.superclass == 'missile' or bull.shield_piercing == 'yes': 
-                    for tur in self.turret_ids:
+                
+                for tur in self.turret_ids:
+                    if self.actual_sas [0] [0] == 0 or bull.superclass == 'missile' or bull.shield_piercing == 'yes' or object_list [tur].z_dimension == 'yes': 
                         tur = object_list [tur]
                         if tur.determine_hit (bull, damage) == 1: 
                             ex = explosion (2, 0, position = bull.display_position , colour = RED)
@@ -5031,7 +5033,7 @@ def create_asteroid_field (position, number, seize):
 
         
 
-def create_mission (mission):
+def create_mission (mission, custom_or_campaign):
     global running_mission_info
     running_mission_info = mission 
     ships = mission.get ('ships')
@@ -5057,7 +5059,7 @@ def create_mission (mission):
             create_asteroid_field (a [0], a [1] , a [2])
 
     global mission_running
-    mission_running = 1
+    mission_running = {'campaign': 1, 'custom': 2} [custom_or_campaign]      ###  Values for "mission_running":   0 = no  ;; 1 = campaign_mission  ;; 2 = custom_mission 
     global end_game
     end_game = 0 
 
@@ -5799,7 +5801,7 @@ def mainloop ():
                 fire_torpedo = 1
             
                 
-            if mission_running == 1:  
+            if mission_running in [1,2]:  
                 if event.key == pygame.K_z : radar_factor = int (radar_factor / 2)
                 if event.key == pygame.K_x : radar_factor *= 2
                 if event.key == pygame.K_l : log_factor = log_factor * 2
@@ -5877,7 +5879,7 @@ def mainloop ():
 
     
         
-        if mission_running == 1 and pressed [308] == 0 and mission_timer >= 100:
+        if mission_running in [1,2] and pressed [308] == 0 and mission_timer >= 100:
             if keydown [pygame.K_1]: ship.set_speed_mode (object_list [1], 's' )
             if pressed [pygame.K_2]: ship.set_speed_mode (object_list [1], 'm' )
             if pressed [pygame.K_3]: ship.set_speed_mode (object_list [1], 'h' )
@@ -5894,8 +5896,10 @@ def mainloop ():
         ###  End Mission
         if pressed [308] == 1  and keydown [113]== 1:
             running = 0
-            campaign_state += 1 
-            start_debriefing_screen = 'yes'
+            if mission_running == 1: 
+                campaign_state += 1 
+                start_debriefing_screen = 'yes'
+            elif mission_running == 2: cleanup_old_mission () 
             end_game = 1  
 
        
@@ -5946,7 +5950,7 @@ def mainloop ():
                 if event.key == pygame.K_p: pause = 0
                 
         
-        if mission_running == 1:
+        if mission_running in [1,2]:
             mission_timer += 1 
             main_screen = 0
             if len (enemy_ship_list) > 0:
@@ -6150,7 +6154,7 @@ def mainloop ():
             trigger_point.trigger (t)
 
         '''
-        if mission_running == 1:
+        if mission_running in [1,2]:
             if nav_points != None:
             
                 for e, nav in enumerate (nav_points):
@@ -6319,7 +6323,7 @@ def mainloop ():
         
         # if pressed [308] == 1  and keydown [60]== 1:
         if 1 == 1: 
-            if mission_running == 1:
+            if mission_running in [1,2]:
                 if  global_target_object_id != None :
                     player_pos = ship.output_position (object_list [1])
                     target_pos = ship.output_position (object_list [global_target_object_id ])
@@ -6544,8 +6548,11 @@ while running_outer:
         background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
         background.place (x = 0, y = 0 )
 
-        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'campaign' , border = 10, bg = 'grey',  font=("Helvetica", 30))
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Pirate Campaign' , border = 10, bg = 'grey',  font=("Helvetica", 30))
         title.pack (side = 'top', fill = 'x')
+
+        speech = Tkinter.Label (frame_0_a, relief = 'raised', border = 5,  text = 'Welcome Rookies! In the time- honored Navy tradition, you will test your skills against pirates: Bad pilots in outdated fighters. Those of you who survive this campaign will get the chance to prove themselves against the enemy.' , bg = 'grey',  font=("Helvetica", 14), wraplength = 400 )
+        speech.pack () 
 
 
         mission_button = Tkinter.Button (frame_0_a, text = 'Next Mission', border = 10, fg = 'red', font = ("Helvetica", 30), command = lambda: create_briefing_menu ())
@@ -6631,7 +6638,7 @@ while running_outer:
         def start_command ():
             current_mission ['ships'] [0] [1] = available_ship_list [ship_selected.get ()]
             current_mission ['asteroids'] = [] 
-            create_mission (current_mission) 
+            create_mission (current_mission, 'campaign') 
             
         mission_button = Tkinter.Button (frame_0_a, text = 'Start Mission', border = 10, fg = 'red', font = ("Helvetica", 30), command = lambda: start_command ())
         mission_button.pack (side = 'bottom', fill = 'x' )
@@ -6893,7 +6900,7 @@ while running_outer:
                         player_ship_list.append (item)
             
                     
-            if player_ship_list != []: create_mission (custom_mission)
+            if player_ship_list != []: create_mission (custom_mission, 'custom')
             
             
         start_button = Tkinter.Button (frame_0_a, border = 3, relief = 'ridge' , text = 'start mission', fg = 'red', font=("Helvetica", 30), command = lambda : start_command () )
