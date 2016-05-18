@@ -28,7 +28,12 @@
 ### version 160j    :: split SCYLLA into Empire version and outdated pirate version
 ### version 161     :: small change to "hit" method: turrets are only hit if the shields are already down or the bullet/missile is shieldbreaking
 ### version 161a    :: enhanced HAMMERHEAD's turret hitpoints to 4.
-### version 162b    :: mission_running now has values '0' for 'no', ;; '1' for 'campaign_mission' ;; '2' for 'custom_mission'    ;;;; >>> solved the bugs : 1) Campaign Debriefing for Custom Missions , 2) Campaign count increased by playing custom missions 
+### version 162b    :: mission_running now has values '0' for 'no', ;; '1' for 'campaign_mission' ;; '2' for 'custom_mission'    ;;;; >>> solved the bugs : 1) Campaign Debriefing for Custom Missions , 2) Campaign count increased by playing custom missions
+### version 162c    :: moved target ship name 100 pixels up
+### version 162d    :: using numpad 1-3 for primary, secondary, tertiary goals works again
+### version 162e    :: added descriptions to cannons
+### version 162f    :: ship blinks while cloaking / decloaking
+### version 162g    :: solved bug: cloaked, cloaking and decloaking ships now properly cannot shoot missiles or torpedoes anymore. 
 ##############################      
 
 from __future__ import division
@@ -242,16 +247,16 @@ PILOT_QUALITY = {'ace': [0,0], 'excellent' : [0.1, 1 ], 'good' : [0.2,3], 'avera
 
 TOKEN = {'name': 'token', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 0, 'ammo_weapon': 'no', 'colour': ORANGE}
 
-LASER = {'name': 'laser', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE}
-PARTICLE = {'name': 'particle', 'range': 650, 'velocity': 350, 'damage': 6, 'cooldown': 7, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': MAGENTA}
+LASER = {'name': 'laser', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE, 'description': 'The most common fighter weapon. Decent combination of range,muzzle velocity and damage per time.'}
+PARTICLE = {'name': 'particle', 'range': 650, 'velocity': 350, 'damage': 6, 'cooldown': 7, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': MAGENTA, 'description': 'Sniper Weapon. Long range; A single shot does high damage, but damage per time is low due to low rate of fire.'}
 
 SF_LASER = {'name': 'sf_laser', 'range': 300, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE}
 OLD_LASER = {'name': 'old_laser', 'range': 400, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE}
-ION = {'name': 'ion', 'range': 300, 'velocity': 200, 'damage': 0.5, 'cooldown': 1, 'maximum_load': 10, 'ammo_weapon': 'no', 'colour': GOLD, 'ion_damage': 'yes'}
-MASS = {'name': 'mass', 'range': 300, 'velocity': 170, 'damage': 2.2, 'cooldown': 3, 'burst': 4, 'maximum_load': 5, 'ammo_weapon': 'no', 'colour': GREY }
-NEUTRON = {'name': 'neutron', 'range': 220, 'velocity': 120, 'damage': 4, 'cooldown': 2.5, 'maximum_load': 3, 'ammo_weapon': 'no', 'colour': BLUE, 'ion_damage': 'yes'}
-STARFIRE = {'name': 'starfire', 'range': 800, 'velocity': 500, 'damage': 10, 'cooldown': 4, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': YELLOW, 'shield_piercing': 'yes'}
-PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 8, 'cooldown': 5, 'maximum_load': 2, 'ammo_weapon': 'no', 'colour': RED}
+# ION = {'name': 'ion', 'range': 300, 'velocity': 200, 'damage': 0.5, 'cooldown': 1, 'maximum_load': 10, 'ammo_weapon': 'no', 'colour': GOLD, 'ion_damage': 'yes'}
+MASS = {'name': 'mass', 'range': 300, 'velocity': 170, 'damage': 2.2, 'cooldown': 3, 'burst': 4, 'maximum_load': 5, 'ammo_weapon': 'no', 'colour': GREY , 'description': 'The Mass Driver Cannon inflicts insane amounts of damage at medium range. It fires bursts of four shots each.'}
+NEUTRON = {'name': 'neutron', 'range': 220, 'velocity': 120, 'damage': 4, 'cooldown': 2.5, 'maximum_load': 3, 'ammo_weapon': 'no', 'colour': BLUE, 'ion_damage': 'yes', 'description': 'The Neutron Cannon is a powerful short- range weapon. A single hit is enough to kill the shields of a light fighter, but its low muzzle velocity and rate of fire make it difficult to hit with. It circumvents Armor: All damage that bypasses the shields goes directly to the internal systems.'}
+STARFIRE = {'name': 'starfire', 'range': 800, 'velocity': 500, 'damage': 10, 'cooldown': 4, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': YELLOW, 'shield_piercing': 'yes', 'description': 'Extreme Range. Extreme Firepower. Shield- Piercing. The largest and most powerful fighter Weapon ever.'}
+PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 12, 'cooldown': 5, 'maximum_load': 2, 'ammo_weapon': 'no', 'colour': RED, 'description': 'In many ways a more extreme version of the Neutron Cannon: A single hit deals insane amounts of damage, but you will have a hard time hitting a moving target.'}
 
 AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 100, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
 AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 100, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
@@ -261,13 +266,13 @@ PHASE_TRANSIT = {'name': 'phase transit', 'range': 20000, 'velocity': 1000, 'dam
 
 AK_80MM_20S = {'name': 'ak_80mm_20s', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 20, 'ammo_weapon': 'yes', 'colour': GREY }
 
-FLAK = {'name': 'flak', 'range': 1500, 'velocity': 300, 'damage': 10, 'cooldown': 1, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': GOLD, 'explosion': 'yes', 'explosion_radius': 40 }
+FLAK = {'name': 'flak', 'range': 1500, 'velocity': 300, 'damage': 8, 'cooldown': 1, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': GOLD, 'explosion': 'yes', 'explosion_radius': 40 }
 
 
 ### Definition der Raketen und Torpedos
 HEAT_SEEKING = [ 'heatseeking', [110,50,10,1], RED, {'damage': 'm1' } ]
-RADAR = [ 'radar', [80,40,8,1], BLUE, {'damage': 'm1' } ]
-DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'damage': 'm1' , 'explosion_radius': 10}]
+RADAR = [ 'radar', [70,30,6,1], BLUE, {'damage': 'm1' } ]
+DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'damage': 'm1' , 'explosion_radius': 5}]
 DUMB_DELAYED = ['dumb_delayed', [60,0,1,15], ORANGE, {'damage': 'm1' , 'explosion_radius': 10} ]
 HEAVY_DUMB = [ 'heavy_dumb', [60,0,1,10], GOLD, {'damage': 'm2', 'explosion_radius': 1 } ] 
 MINE = [ 'mine', [0,0,10,0], YELLOW, {'damage': 'm1' }]
@@ -275,7 +280,7 @@ DELAYED_EXPLOSION = [ 'delayed', [0,0,0,30], WHITE , {'damage': 'm1' }]
 DUMB_DELAY = 6 ### time: delayed explosion of dumb2 missile
 MICRO = ['micro', [60,40,1,1], GREEN, {'damage': 5 }]
 
-TORPEDO = ['torpedo', [20,1,0.3,0], BLUE, {'range': 4000, 'damage': 't' } ]
+TORPEDO = ['torpedo', [20,1,0.2,0], BLUE, {'range': 4000, 'damage': 't' } ]
 
 
 
@@ -339,7 +344,7 @@ SALTHI = {'name': 'salthi', 'movement': (70,70,2,170), 'sas': [[2,1,1,1],[2,1,1,
 
 
 DRAHLTI = {'name': 'drahlti', 'movement': (50,50,2,120), 'sas': [[6,4,4,4],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-2,-3), (-4,-2), (-4,0), (-3,2), (-1,3), (-1,1) ])], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'the Empire\' s standart light fighter. Has a lower turn rate than the hornet, but stronger shields.'}
-HORNET = {'name': 'hornet', 'movement': (50,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon',( (0,-4), (-2,-4), (-2,-5), (-3,-5), (-3,-4), (-6,-4), (-1,1), (-3,3), (0,6), (3,3), (1,1), (6,-4), (3,-4), (3,-5), (2,-5), (2,-4))  ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'The Federations standart light fighter ist fast and agile. Its Firepower is not impressive, but enough to get the job done' }
+HORNET = {'name': 'hornet', 'movement': (50,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon',( (0,-4), (-2,-4), (-2,-5), (-3,-5), (-3,-4), (-6,-4), (-1,1), (-3,3), (0,6), (3,3), (1,1), (6,-4), (3,-4), (3,-5), (2,-5), (2,-4))  ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'The Federations standart light fighter ist fast and agile. Its Firepower is not impressive, but enough to get the job done.' }
 TIE = {'name': 'tie', 'movement': (30,30,1,50), 'sas': [[0.1,0.1,0.1,0.1],[0.5,0.5,0.5,0.5],[0.1],[0,0,0,0] ], 'guns':  [ (SF_LASER, 3, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-1,3), (-1, - 1),(-2,1), (-1,3), (1,3), (2,1), (1,-1), (1,-3)     )], 'hitbox':  ['standart', 2], 'turrets': [], 'ship_class': 'fighter' , 'decription': 'Micro- Fighter. These tiny spacecraft are just big enough to carry a pilot, engines, and a gun. Slow and fragile, only dangerous in great numbers.' }
 
 RAPIER = {'name': 'rapier', 'movement': (55,60,2,150), 'sas': [[10,5,10,5],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1), (LASER, 5, 0) ], 'missile_launchers': 2, 'graphics': ['polygon', ( (-2,-6), (-2,-5), (-5,-5), (-3,-1),(-1,-1), (-1,2), (-3,2), (0,6), (3,2), (1,2), (1,-1), (3,-1), (5,-5), (2,-5), (2,-6)               )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'The Federations newest Heavy Fighter. The best Mix of Agility, Armament and Protection available.' }
@@ -383,7 +388,7 @@ TEST = {'name': 'test', 'movement': (50,60,2,150), 'sas': [[500,300,300,300],[4,
 TALON = {'name': 'talon', 'movement': (50,40,2,120), 'sas': [[3,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-3,-6),(-3,-3), (-1,-1), (-1,2), (-2,3), (-2,5), (-1,6) ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'kill_value': 300, 'description': 'Outdated. Fast, but poorly armed and protected'}
 DEMON = {'name': 'demon', 'movement': (35,60,2,100), 'sas': [[5,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (AK_80MM_20S, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ((-4,-6), (-4,-5), (-8,-4), (-8,-2), (-5,-1), (-5,0), (-4,2), (-4,4), (-3,6), (-2,6), (-2,4), (2,4), (2,6), (3,6), (4,4), (4,2), (5,0), (5,-1), (8,-2), (8,-4), (4, -5), (4,-6) )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'description': 'Outdated. Slow, but more maneuverable than the Talon. The single gun carries only limited ammo'}
 
-SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[8,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile lauchner make up for it' }
+SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[8,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile launcher make up for it.' }
 
 JALTHI = {'name': 'jalthi', 'movement': (35,30,2,100), 'sas': [[15,10,10,10],[10,5,5,5],[6],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1),(LASER, 7, 1),(LASER, 7, -1),(LASER, 5, 2),(LASER, 5, -2) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-4,-5), (-7,0), (-5,3), (-5,6), (-4,6), (-4,3), (-3,3), (-2,2), (-2,5), (-1,5), (-1,2), (1,2), (1,5), (2,5), (2,2), (3,3), (4,3), (4,6), (5,6), (5,3), (7,0), (4,-5)                   )], 'hitbox':  ['standart', 5], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Heavy Fighter. Its six laser cannons can take on any fighter head-on, but once the enemy gets behind, the Jalthi is screwed'}
 
@@ -612,7 +617,7 @@ CHARYBDIS = { 'name': 'charybdis',
              'ship_class': 'bomber' , 'description': 'The Charybdis Gunboat carries a powerful flak, whose explosive shells can hit even the most agile fighter at great distances. Its greatest weakness is the extremely vulnerable gun turret.' }
 
 STRAKHA = {'name': 'Strakha', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[0.1,0.1,0.1,0.1],[4],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'stealth_device': 'yes', 'description': 'Stealth fighter. [press "r" to activate / deactivate stealth]'}
-STRAKHA_N = {'name': 'Strakha N', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[0.1,0.1,0.1,0.1],[4],[0,0,0,0] ], 'guns':  [ (NEUTRON, 5,-1), (NEUTRON, 5,1)], 'missile_launchers': 2, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'stealth_device': 'yes', 'description': 'This Version has Neutron Cannons instead of lasers' }
+STRAKHA_N = {'name': 'Strakha N', 'movement': (50,30,2,150), 'sas': [[2,2,2,2],[0.1,0.1,0.1,0.1],[4],[0,0,0,0] ], 'guns':  [ (PLASMA, 5,-1), (PLASMA, 5,1)], 'missile_launchers': 1, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'stealth_device': 'yes', 'description': 'This Version has Neutron Cannons instead of lasers' }
 
 MESSERSCHMIDT = {'name': 'messerschmidt', 'movement': (80,35,2,220), 'sas': [[5,3,3,3],[4,3,3,3],[3],[0,0,0,0] ], 'guns':  [ (STARFIRE, 5,0) ], 'missile_launchers': 2, 'graphics': ['polygon',complete_half_ship ([(-1,-6),(-3,-5),(-5,-1),(-7,-3),(-7,1),(-6,4),(-4,6),(-4,4),(-3,1),(-2,0),(0,2)   ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'radar': 3500, 'description': 'Hyperspeed Interceptor. Build for one Purpose: Kill enemy bombers, as fast as possible' } ### old model: ( (0, -3), (-2,-3), (-2,-5), (-5,-5), (-5,2), (-4,4), (-3,4), (-2,2), (-2,0), (-1,2), (-1,8), (0,9), (1,8), (1,2), (2,0), (2,2), (4,3), (4,4), (5,2), (5,-5), (2,-5), (2, -3) )
 
@@ -622,7 +627,9 @@ RAPTOR_B = copy.deepcopy ( RAPTOR)
 RAPTOR_B ['name'] = 'raptor B' 
 RAPTOR_B ['guns'] = [  (PARTICLE, 5,-1), (PARTICLE,5,-1), (PARTICLE, 2,2), (PARTICLE, 2,-2) ] 
 PSYCHO = { 'name': 'psycho', 'movement': (35,100,6,120), 'sas': [[30,1,1,1],[10,1,1,1],[3],[0,0,0,0] ],'guns': [ (NEUTRON,5,1), (NEUTRON,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)], 'missile_launchers': 0, 'graphics':[ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )], 'hitbox':['standart', 5], 'turrets': [], 'ship_class': 'fighter' }
-
+PSYCHO_B = copy.deepcopy (PSYCHO)
+PSYCHO_B ['name'] = 'psycho B'
+PSYCHO_B ['guns'] = [ (PLASMA,5,1), (PLASMA,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)]
 
 
 
@@ -636,11 +643,11 @@ SMALL_SUPPLY_DEPOT = {'name': 'small_supply_depot', 'movement': (0.00001,0.00001
 ship_type_list = [ TEST, MESSERSCHMIDT, PSYCHO, RAPTOR, BROADAXE, HAMMERHEAD,DEADMAN, LASER_MINE,TALON, TARGET_DUMMY, JALTHI, SCIMITAR, DRAHLTI, STRAKHA, KOMET ]
 
 fed_cap_ships = []
-fed_fighters = [RAPIER, KOMET, SHRIKE, MESSERSCHMIDT, PSYCHO, RAPTOR,RAPTOR_B,  HAMMERHEAD, HORNET,SCIMITAR ]
+fed_fighters = [ HORNET,SCIMITAR, RAPTOR,RAPTOR_B, RAPIER, KOMET, MESSERSCHMIDT, PSYCHO, PSYCHO_B, HAMMERHEAD]
 fed_corvettes = [SABRE, BROADAXE, CHARYBDIS, SHRIKE, DRAGON]
 fed_civs = [DEADMAN]
 
-empire_cap_ships = [RALARI,FRALTHI, SIVAR, MORONIR]
+empire_cap_ships = [RALARI,FRALTHI, SIVAR]
 empire_fighters = [JALTHI,DRAHLTI,STRAKHA,STRAKHA_N, TIE, SALTHI]
 empire_corvettes = [SCYLLA] 
 empire_civs = [MORONIR]
@@ -1742,7 +1749,7 @@ class window_5 (window): ### player_shields + speed
             # player man
 
             s = object_list [1]
-            self.player_man.update ( ['Maneuvr. :  ' + str (round (s.man, 0 )), WHITE, 12 ], {'expand_x': self.x_seize - 36} ) 
+            self.player_man.update ( ['Turn Rate :  ' + str (round (s.man, 0 )), WHITE, 12 ], {'expand_x': self.x_seize - 36} ) 
 
         #       shield display
             s = object_list [1]
@@ -1797,16 +1804,18 @@ class window_6 (window): # target shields and stuff
 
             if global_target_object_id != None:
                 s = object_list [global_target_object_id]
+
+                # target name
                 self.target_name.update ( [s.name.upper (), ORANGE, 15], {} ) 
 
                 # target speed
-                self.target_speed.update ( ['Speed :  ' + str (round (s.speed,0)), ORANGE, 12 ], {} )
+                self.target_speed.update ( ['Speed :  ' + str (round (s.speed,0)), GOLD, 12 ], {} )
 
                 # target man
-                self.target_man.update ( ['Maneuvr. :  ' + str (round (s.man, 0 )), WHITE, 12 ], {} )
+                self.target_man.update ( ['Turn Rate :  ' + str (round (s.man, 0 )), WHITE, 12 ], {} )
 
                 # target dis
-                self.target_dis.update ( [  'Targ dis ' + cut_string (str ( dfunctions.distance_2 (ship.output_position (object_list [1]), ship.output_position (object_list [global_target_object_id]))), '.'), MAGENTA, 12 ], {} )
+                self.target_dis.update ( [  'Distance : ' + cut_string (str ( dfunctions.distance_2 (ship.output_position (object_list [1]), ship.output_position (object_list [global_target_object_id]))), '.'), MAGENTA, 12 ], {} )
 
             
             
@@ -1831,7 +1840,7 @@ class window_6 (window): # target shields and stuff
                 frame.blit (speed, (0,200))
                 frame.blit (man, (0, 225))
                 frame.blit (dis, (0,250))
-                frame.blit (name, (0,275))
+                frame.blit (name, (0,175))
 
 
 
@@ -2823,9 +2832,13 @@ class ship (object):
         self.cannon_ids = []
         self.cannons_sorted = []
 
+        
+
         for item in s_type ['guns']:
             c = cannon (item, self.object_id )
             self.cannon_ids.append (c.object_id)
+
+        self.sort_guns ()
       
 
         ### turrets 
@@ -4086,7 +4099,7 @@ class ship (object):
         surface = screen
         if 'surface' in wargs: surface = wargs ['surface']
 
-        if self.stealthed == 'no':
+        if self.stealthed == 'no' and ( self.stealthed_activation_timer <= 0 or self.stealthed_activation_timer % 10 > 5 ) and (self.stealthed_deactivation_timer <= 0 or self.stealthed_deactivation_timer % 10 > 5):
   
 
          
@@ -4192,8 +4205,9 @@ class ship (object):
     
     # # Schieﬂ- Funktion: Erzeugt ein bullet- objekt
     def shoot (self, **wargs):
+        print 'test 600  ', self.cannons_sorted 
         
-        if self.stealthed_activation_timer <= 0 and self.stealthed_deactivation_timer <= 0 and self.stealthed == 'no': 
+        if self.stealthed_activation_timer <= 0 and self.stealthed_deactivation_timer <= 0 and self.stealthed != 'yes': 
             for e, can in enumerate (self.cannon_ids):
                 cannon.update_position (object_list [can])
                 if (e + 1) * self.damage_threshold > self.cannon_damage: ### the first (damage / 2) cannons do not shoot
@@ -4220,42 +4234,44 @@ class ship (object):
             
     # # raketen - Funktion
     def shoot_missile (self,m_type):
-        if ship.missile_cooldown (self) == 1 and self.stealthed_activation_timer < 0 and self.stealthed_deactivation_timer <= 0:
-            global target_count
-            global enemy_ship_list
-            if self.player == 1:
-                if enemy_ship_list != []:
-                    self.target_object_id = ship.output_object_id (enemy_ship_list [target_count])
-                else: self.target_object_id = None 
-           
-            if m_type [0] == 'micro':
-                self.micro_missile_counter.append (20) 
-                
-            else:
-                m = missile (m_type, self.target_object_id, self.direction, self.speed, self.object_id)
-                x,y = self.position
-                x1 = math.sin (self.direction)
-                y1 = math.cos (self.direction)
-                missile.set_missile_vorhalt (m, self.missile_vorhalt)
-                if m_type [0] == 'mine': missile.set_position (m, x - 12 * x1, y -12 * y1)
-                else: missile.set_position (m, x +35 * x1,y + 35 * y1)
-                missile_list.append (m)
+        if self.stealthed_activation_timer <= 0 and self.stealthed_deactivation_timer <= 0 and self.stealthed != 'yes':
+            if ship.missile_cooldown (self) == 1:
+                global target_count
+                global enemy_ship_list
+                if self.player == 1:
+                    if enemy_ship_list != []:
+                        self.target_object_id = ship.output_object_id (enemy_ship_list [target_count])
+                    else: self.target_object_id = None 
+               
+                if m_type [0] == 'micro':
+                    self.micro_missile_counter.append (20) 
+                    
+                else:
+                    m = missile (m_type, self.target_object_id, self.direction, self.speed, self.object_id)
+                    x,y = self.position
+                    x1 = math.sin (self.direction)
+                    y1 = math.cos (self.direction)
+                    missile.set_missile_vorhalt (m, self.missile_vorhalt)
+                    if m_type [0] == 'mine': missile.set_position (m, x - 12 * x1, y -12 * y1)
+                    else: missile.set_position (m, x +35 * x1,y + 35 * y1)
+                    missile_list.append (m)
 
     def shoot_torpedo (self):
         m_type = TORPEDO
         
-        if ship.torpedo_cooldown (self) == 1 and self.stealthed_activation_timer < 0 and self.stealthed_deactivation_timer <= 0:
+        if  self.stealthed_activation_timer < 0 and self.stealthed_deactivation_timer <= 0  and self.stealthed != 'yes':
+            if ship.torpedo_cooldown (self) == 1 :
             
             
             
-            m = missile (TORPEDO, self.target_object_id, self.direction, self.speed, self.object_id)
-            x,y = self.position
-            x1 = math.sin (self.direction)
-            y1 = math.cos (self.direction)
-            missile.set_missile_vorhalt (m, self.missile_vorhalt)
-            
-            missile.set_position (m, x +( self.radius + 20 ) * x1,y + (self.radius + 20)  * y1)
-            missile_list.append (m)
+                m = missile (TORPEDO, self.target_object_id, self.direction, self.speed, self.object_id)
+                x,y = self.position
+                x1 = math.sin (self.direction)
+                y1 = math.cos (self.direction)
+                missile.set_missile_vorhalt (m, self.missile_vorhalt)
+                
+                missile.set_position (m, x +( self.radius + 20 ) * x1,y + (self.radius + 20)  * y1)
+                missile_list.append (m)
 
     
     def update_micro_missile (self):
