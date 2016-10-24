@@ -30,7 +30,7 @@
 ### version 161a    :: enhanced HAMMERHEAD's turret hitpoints to 4.
 ### version 162b    :: mission_running now has values '0' for 'no', ;; '1' for 'campaign_mission' ;; '2' for 'custom_mission'    ;;;; >>> solved the bugs : 1) Campaign Debriefing for Custom Missions , 2) Campaign count increased by playing custom missions
 ### version 162c    :: moved target ship name 100 pixels up
-### version 162d    :: using numpad 1-3 for primary, secondary, tertiary goals works again
+### version 162d    :: using numpad 1-3 for primary, secondary, tertiary guns works again
 ### version 162e    :: added descriptions to cannons
 ### version 162f    :: ship blinks while cloaking / decloaking
 ### version 162g    :: solved bug: cloaked, cloaking and decloaking ships now properly cannot shoot missiles or torpedoes anymore. 
@@ -248,7 +248,7 @@ PILOT_QUALITY = {'ace': [0,0], 'excellent' : [0.1, 1 ], 'good' : [0.2,3], 'avera
 TOKEN = {'name': 'token', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 0, 'ammo_weapon': 'no', 'colour': ORANGE}
 
 LASER = {'name': 'laser', 'range': 500, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE, 'description': 'The most common fighter weapon. Decent combination of range,muzzle velocity and damage per time.'}
-PARTICLE = {'name': 'particle', 'range': 650, 'velocity': 350, 'damage': 6, 'cooldown': 7, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': MAGENTA, 'description': 'Sniper Weapon. Long range; A single shot does high damage, but damage per time is low due to low rate of fire.'}
+PARTICLE = {'name': 'particle', 'range': 650, 'velocity': 350, 'damage': 6, 'cooldown': 10, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': MAGENTA, 'description': 'Sniper Weapon. Long range; A single shot does high damage, but damage per time is low due to low rate of fire.'}
 
 SF_LASER = {'name': 'sf_laser', 'range': 300, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE}
 OLD_LASER = {'name': 'old_laser', 'range': 400, 'velocity': 250, 'damage': 1.5, 'cooldown': 1, 'maximum_load': 7, 'ammo_weapon': 'no', 'colour': ORANGE}
@@ -256,8 +256,8 @@ OLD_LASER = {'name': 'old_laser', 'range': 400, 'velocity': 250, 'damage': 1.5, 
 MASS = {'name': 'mass', 'range': 300, 'velocity': 170, 'damage': 2.2, 'cooldown': 3, 'burst': 4, 'maximum_load': 5, 'ammo_weapon': 'no', 'colour': GREY , 'description': 'The Mass Driver Cannon inflicts insane amounts of damage at medium range. It fires bursts of four shots each.'}
 NEUTRON = {'name': 'neutron', 'range': 220, 'velocity': 120, 'damage': 4, 'cooldown': 2.5, 'maximum_load': 3, 'ammo_weapon': 'no', 'colour': BLUE, 'ion_damage': 'yes', 'description': 'The Neutron Cannon is a powerful short- range weapon. A single hit is enough to kill the shields of a light fighter, but its low muzzle velocity and rate of fire make it difficult to hit with. It circumvents Armor: All damage that bypasses the shields goes directly to the internal systems.'}
 STARFIRE = {'name': 'starfire', 'range': 800, 'velocity': 500, 'damage': 10, 'cooldown': 4, 'maximum_load': 4, 'ammo_weapon': 'no', 'colour': YELLOW, 'shield_piercing': 'yes', 'description': 'Extreme Range. Extreme Firepower. Shield- Piercing. The largest and most powerful fighter Weapon ever.'}
-PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 12, 'cooldown': 5, 'maximum_load': 2, 'ammo_weapon': 'no', 'colour': RED, 'description': 'In many ways a more extreme version of the Neutron Cannon: A single hit deals insane amounts of damage, but you will have a hard time hitting a moving target.'}
-
+PLASMA = {'name': 'plasma', 'range': 120, 'velocity': 70, 'damage': 12, 'cooldown': 5, 'maximum_load': 3, 'ammo_weapon': 'no', 'colour': RED, 'description': 'In many ways a more extreme version of the Neutron Cannon: A single hit deals insane amounts of damage, but you will have a hard time hitting a moving target.'}
+TACHYON = {'name': 'tachyon', 'range': 500, 'velocity': 300, 'damage': 3, 'cooldown': 2, 'maximum_load': 5, 'ammo_weapon': 'no', 'colour': GREEN,'ion_damage': 'yes'}
 AM_10 = {'name': 'antimatter 10', 'range': 2500, 'velocity': 100, 'damage': 100, 'cooldown': 10, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 4}
 AM_20 = {'name': 'antimatter 20', 'range': 5000, 'velocity': 100, 'damage': 500, 'cooldown': 20, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 6}
 AM_40 = {'name': 'antimatter 40', 'range': 10000, 'velocity': 100, 'damage': 2000, 'cooldown': 30, 'maximum_load': 1, 'ammo_weapon': 'no', 'colour': BLUE, 'second_colour': WHITE, 'antimatter': 'yes', 'display_radius': 8}
@@ -272,7 +272,7 @@ FLAK = {'name': 'flak', 'range': 1500, 'velocity': 300, 'damage': 8, 'cooldown':
 ### Definition der Raketen und Torpedos
 HEAT_SEEKING = [ 'heatseeking', [110,50,10,1], RED, {'damage': 'm1' } ]
 RADAR = [ 'radar', [70,30,6,1], BLUE, {'damage': 'm1' } ]
-DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'damage': 'm1' , 'explosion_radius': 5}]
+DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'damage': 'm1' , 'explosion_radius': 0}]
 DUMB_DELAYED = ['dumb_delayed', [60,0,1,15], ORANGE, {'damage': 'm1' , 'explosion_radius': 10} ]
 HEAVY_DUMB = [ 'heavy_dumb', [60,0,1,10], GOLD, {'damage': 'm2', 'explosion_radius': 1 } ] 
 MINE = [ 'mine', [0,0,10,0], YELLOW, {'damage': 'm1' }]
@@ -280,7 +280,7 @@ DELAYED_EXPLOSION = [ 'delayed', [0,0,0,30], WHITE , {'damage': 'm1' }]
 DUMB_DELAY = 6 ### time: delayed explosion of dumb2 missile
 MICRO = ['micro', [60,40,1,1], GREEN, {'damage': 5 }]
 
-TORPEDO = ['torpedo', [20,1,0.2,0], BLUE, {'range': 4000, 'damage': 't' } ]
+TORPEDO = ['torpedo', [40,1,0.2,0], BLUE, {'range': 4000, 'damage': 't' } ]
 
 
 
@@ -381,7 +381,7 @@ SCYLLA_P = {'name': 'scylla P', 'movement': (20,20,2,50), 'sas': [[15,10,15,10],
 SHRIKE = {'name': 'shrike', 'movement': (65,30,2,150), 'sas': [[25,15,15,15],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'torpedo_launchers': 1,  'graphics': ['polygon', complete_half_ship ([ (-5,-8), (-3,-4), (-3,1), (-4,7),(-2,9), (0,7)  ])], 'hitbox':  ['standart', 6], 'turrets': [], 'ship_class': 'bomber', 'description': 'Hyperspeed Bomber. It can easily outrun any enemy fighter except the salthi' }
 
 
-KOMET = {'name': 'komet', 'movement': (30,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (NEUTRON, 5, -1), (NEUTRON, 5, 1),(NEUTRON, 3, -1), (NEUTRON, 3, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'afterburner_gliding_multiplicator': 2, 'afterburner_activation_modificator': 0.2, 'afterburner_acceleration_modificator': 0.2, 'afterburner_cooldown_modificator': 0.2 , 'description': 'The Komet features an improved afternburner system with reduced acceleration and cooldown time, and increased gliding time. It is designed for gliding drive- by shootings'}
+KOMET = {'name': 'komet', 'movement': (30,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (PLASMA, 5, -1), (PLASMA, 5, 1),(PLASMA, 3, -3), (PLASMA, 3, 3) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'afterburner_gliding_multiplicator': 2, 'afterburner_activation_modificator': 0.2, 'afterburner_acceleration_modificator': 0.2, 'afterburner_cooldown_modificator': 0.2 , 'description': 'The Komet features an improved afternburner system with reduced acceleration and cooldown time, and increased gliding time. It is designed for gliding drive- by shootings'}
 
 TEST = {'name': 'test', 'movement': (50,60,2,150), 'sas': [[500,300,300,300],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0,'torpedo_launchers': 2,  'graphics': ['polygon', ( (-2,-5), (-5,-3),(-5,1),(-3,5),(-2,-1),(2,-1),(3,5),(5,1),(5,-3),(2,-5)         )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' }
 
@@ -543,7 +543,7 @@ BROADAXE = { 'name': 'broadaxe',
              'sas': [[25,25,25,25],[25,25,25,25],[20],[0,0,0,0] ],
              'guns': [(PARTICLE,5,0),(PARTICLE,3,-2),(PARTICLE,3,2)],
              'missile_launchers': 0,
-             'torpedo_launchers': 3,
+             'torpedo_launchers': 4,
              'missile_launchers' : 2,
              'turrets': [
                  {'guns': [(LASER,-1), (LASER, 1) ],
@@ -607,6 +607,7 @@ CHARYBDIS = { 'name': 'charybdis',
              'turrets': [ {'guns': [(FLAK,0)],
                   'vertical_position': -5 ,
                   'horizontal_position': 0,
+                  'hitpoints':1,
                            
                   'alignment': 4.7,
                   'z_dimension': 'yes',
@@ -625,18 +626,25 @@ MESSERSCHMIDT = {'name': 'messerschmidt', 'movement': (80,35,2,220), 'sas': [[5,
 RAPTOR = {'name': 'raptor', 'movement': (45,50,2,130), 'sas': [[10,7,8,7],[10,8,8,8],[10],[0,0,0,0] ], 'guns':[ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2)], 'missile_launchers': 4 ,'turrets' : [], 'graphics': [ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )],'hitbox': ['standart', 5], 'ship_class': 'fighter', 'description': 'The most powerful fighter on the Battlefield. Nothing short of a capital ship will survive a barrage of its four mass drivers and missile launchers. And it is more agile than the scimitar. '  }
 RAPTOR_B = copy.deepcopy ( RAPTOR) 
 RAPTOR_B ['name'] = 'raptor B' 
-RAPTOR_B ['guns'] = [  (PARTICLE, 5,-1), (PARTICLE,5,-1), (PARTICLE, 2,2), (PARTICLE, 2,-2) ] 
+RAPTOR_B ['guns'] = [ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2), (TACHYON,3,-3), (TACHYON, 3,3)]
+RAPTOR_B ['missile_launchers'] = 0 
 PSYCHO = { 'name': 'psycho', 'movement': (35,100,6,120), 'sas': [[30,1,1,1],[10,1,1,1],[3],[0,0,0,0] ],'guns': [ (NEUTRON,5,1), (NEUTRON,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)], 'missile_launchers': 0, 'graphics':[ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )], 'hitbox':['standart', 5], 'turrets': [], 'ship_class': 'fighter' }
 PSYCHO_B = copy.deepcopy (PSYCHO)
 PSYCHO_B ['name'] = 'psycho B'
-PSYCHO_B ['guns'] = [ (PLASMA,5,1), (PLASMA,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)]
+PSYCHO_B ['guns'] = [ (PLASMA,5,1), (PLASMA,5,-1), (PLASMA,3,1),(PLASMA,3,-1)]
 
 
 
 LASER_MINE = {'name': 'laser_mine', 'movement': (0.001,0.001,0.001,0.001), 'sas': [[0.1,0.1,0.1,0.1],[0.1,0.1,0.1,0.1],[0.5],[0,0,0,0] ], 'guns':  [ (TOKEN,0,0) ], 'missile_launchers': 0, 'graphics': ['polygon', (  (-2, 1), (-1,2), (1,2), (2,1), (2,-1), (1,-2), (-1,-2),(-2,-1)       )], 'hitbox':  ['standart', 2], 'turrets': [{'guns': [  (LASER, 0) ], 'vertical_position': 2, 'horizontal_position': 0,'z_dimension': 'yes', 'alignment': 1.57, 'left_area': 3.14, 'right_area': 3.14}], 'ship_class': 'mine' }
 
 TARGET_DUMMY = {'name': 'target_dummy', 'movement': (0.001,0.001,0.001,0.001), 'sas': [[10,10,10,10],[10,10,10,10],[10],[0,0,0,0] ], 'guns':  [ (TOKEN,0,0) ], 'missile_launchers': 0, 'graphics': ['polygon', (  (-2, 1), (-1,2), (1,2), (2,1), (2,-1), (1,-2), (-1,-2),(-2,-1)       )], 'hitbox':  ['standart', 5], 'turrets': [], 'ship_class': 'mine' }
-SMALL_SUPPLY_DEPOT = {'name': 'small_supply_depot', 'movement': (0.00001,0.00001,0.00001,0.00001), 'sas': [[0.001,0.0001,0.001,0.001],[20,20,20,20],[15],[0,0,0,0] ], 'guns':  [ (TOKEN,0,0) ], 'missile_launchers': 0, 'graphics': ['polygon', (  (-10, 5), (-5,10), (5,10), (10,5), (10,-5), (5,-10), (-5,-10),(-10,-5)       )], 'hitbox':  ['standart', 10], 'turrets': [], 'ship_class': 'fighter' }
+SMALL_SUPPLY_DEPOT = {'name': 'small_supply_depot', 'movement': (0.00001,0.00001,0.00001,0.00001), 'sas': [[0.001,0.0001,0.001,0.001],[20,20,20,20],[15],[0,0,0,0] ], 'guns':  [ (TOKEN,0,0) ], 'missile_launchers': 0, 'graphics': ['polygon', (  (-10, 5), (-5,10), (5,10), (10,5), (10,-5), (5,-10), (-5,-10),(-10,-5)       )], 'hitbox':  ['standart', 10], 'turrets': [{'guns': [ (LASER, 0)],
+                           'vertical_position': 2,
+                           'horizontal_position': 0,
+                           'alignment': 1.57,
+                           'left_area': 3.14,
+                           'right_area': 3.14,
+                            'hit_points': 4}], 'ship_class': 'bomber' }
 
 
 # CLAW = [ 'claw',  (5,1,0,1), ((1,1,1,1),(1000,800,600,800),(500),(0,0,0,0)), [ ], [],  [(LASER_T, -100, 80, 1.57, 1.57,1.57),(LASER_T, -40,80,1.57,1.57,1.57),(LASER_T, -40, -80, 4.6,1.57,1.57),(LASER_T, -100,- 80,4.6,1.57,1.57), (LASER_T,0,40, 1.57, 1.57 , 0.4), (LASER_T,60,40, 1.57,1.57,1)], [ 'polygon', (    (- 40,0), (-80,-40), (-80, -120), (-60, -140),(60,- 140), (80, -120), (80, -40), (40, 0), (40, 100), (20,120), (-20,120),(-40,100)    )], ['nonstandart', 160, [ (-80,-140), (-80, -20), (80, -20),(80, -140) ] , [ (-40,-20), (-40,120),(40,120),(40, -20) ] ] ]   
@@ -1430,7 +1438,7 @@ class window (object):
         self.x_seize = 500
         self.y_seize = 400
         self.position = (300,300) 
-        self.outer_colour = BROWN
+        self.outer_colour = WHITE
         self.name = None
         self.counter = 0
         self.outer_border = 10 
@@ -3146,7 +3154,10 @@ class ship (object):
         if 'output_direction' in wargs: return direction 
 
         return relative_bearing
+
+    
     ##############################################################
+
 
     ##############################################################
     def determine_relative_inverserd_direction (self,target):
@@ -3304,7 +3315,8 @@ class ship (object):
             if global_target_object_id not in [None, 'na']:
                 res = ship.determine_relative_bearing (self,object_list[global_target_object_id]) 
                 res = round (res,2)
-                target = object_list [global_target_object_id ] 
+                target = object_list [global_target_object_id ]
+                write_2 (res,(300,300))
                
     #################################################################            
             
@@ -3316,7 +3328,16 @@ class ship (object):
         pass
 
     def update_autopilot_position (self):
-        pass 
+        pass
+
+    def return_relative_bearing_abs (self):
+        if global_target_object_id not in [None, 'na']:
+            res = ship.determine_relative_bearing (self,object_list[global_target_object_id])
+            direction = ship.determine_relative_bearing (self,object_list[global_target_object_id], output_direction = 'yes')
+            return res, direction
+        else: return None, None 
+        
+    
    
         
 
@@ -5859,6 +5880,12 @@ def mainloop ():
                     
                     adjustment = MIDDLE [0] - 220
                     if pressed [306] == 1: adjustment = - ( MIDDLE [0] - 220 )
+
+        elif event.type == pygame.JOYBUTTONDOWN:
+            print 'test 5000 ', event.button
+            if event.button == 1: fire_missile_3 = 1
+            if event.button == 2: fire_missile_5 = 1
+            
                     
                     
 
@@ -5875,11 +5902,7 @@ def mainloop ():
             r = -1 * joy_1.get_axis (0)
             if joy_1.get_button (0) == 1:
                 fire = 1
-            if joy_1.get_button (1) == 1:
-                if joy_button_old <= 0 :
-                    fire_missile_3 = 1
-                    joy_button_old = 10
-        
+           
         ### microcontrols 
         if pressed [pygame.K_s]:
             microcontrol_counter += 1
@@ -6069,8 +6092,10 @@ def mainloop ():
                 if pressed [258] == 1: sh.shoot (guns = 'secondary')
                 if pressed [259] == 1: sh.shoot (guns = 'tertiary')
                 if joystick == 'yes':
-                    if joy_1.get_button (2) == 1: sh.shoot (guns = 'primary')
-                    if joy_1.get_button (3) == 1: sh.shoot (guns = 'secondary')
+                    #if joy_1.get_button (1) == 1: sh.shoot_missile ( DUMBFIRE)
+                    #if joy_1.get_button (2) == 1: sh.shoot_missile ( HEAVY_DUMB) 
+                    if joy_1.get_button (3) == 1: sh.shoot (guns = 'primary')
+                    if joy_1.get_button (4) == 1: sh.shoot (guns = 'secondary')
             
             ship.update_direction (sh,r)
             ship.update_position (sh)
@@ -6279,10 +6304,30 @@ def mainloop ():
 
             
                 
-                    
-            pygame.gfxdraw.aapolygon (screen, (( FADENKREUZ_X - 100, FADENKREUZ_Y - 21), (FADENKREUZ_X + 100, FADENKREUZ_Y - 21), (FADENKREUZ_X + 100, FADENKREUZ_Y -1), (FADENKREUZ_X -100, FADENKREUZ_Y -1)), GREEN ) 
+                #   Box
+            relative_bearing = ship_list [0].return_relative_bearing_abs () [0]
+            relative_bearing_direction = ship_list [0].return_relative_bearing_abs () [1]
+            crosshairs_box_color = WHITE
+            if relative_bearing != None and relative_bearing < 0.01 :
+                if relative_bearing <0.01 : crosshairs_box_color = RED
+                if relative_bearing <0.007 : crosshairs_box_color = ORANGE
+                if relative_bearing <0.005 : crosshairs_box_color = YELLOW
+                if relative_bearing <0.003 : crosshairs_box_color = GREEN
+                if relative_bearing <0.002 : crosshairs_box_color = BLUE
+                if relative_bearing <0.001 : crosshairs_box_color = PURPLE ###wip
+
+                if relative_bearing_direction == 'left': pygame.gfxdraw.aapolygon (screen, (( FADENKREUZ_X - 100, FADENKREUZ_Y - 21), (FADENKREUZ_X , FADENKREUZ_Y - 21), (FADENKREUZ_X , FADENKREUZ_Y -1), (FADENKREUZ_X -100, FADENKREUZ_Y -1)), crosshairs_box_color )
+                if relative_bearing_direction == 'right': pygame.gfxdraw.aapolygon (screen, (( FADENKREUZ_X + 100, FADENKREUZ_Y - 21), (FADENKREUZ_X , FADENKREUZ_Y - 21), (FADENKREUZ_X , FADENKREUZ_Y -1), (FADENKREUZ_X +100, FADENKREUZ_Y -1)), crosshairs_box_color )
+
+                
+                
+                
+            
+            else: pygame.gfxdraw.aapolygon (screen, (( FADENKREUZ_X - 100, FADENKREUZ_Y - 21), (FADENKREUZ_X + 100, FADENKREUZ_Y - 21), (FADENKREUZ_X + 100, FADENKREUZ_Y -1), (FADENKREUZ_X -100, FADENKREUZ_Y -1)), crosshairs_box_color )
+                #   vertival line
             pygame.draw.aaline ( screen, FAINT_WHITE, (FADENKREUZ_X- 99, FADENKREUZ_Y -11), (FADENKREUZ_X + 99, FADENKREUZ_Y -11), 1)
-            pygame.draw.aaline ( screen, FAINT_WHITE, (FADENKREUZ_X, FADENKREUZ_Y - 16), ( FADENKREUZ_X, FADENKREUZ_Y -5), 1)
+                #   horizontal line
+            pygame.draw.aaline ( screen, (0,255,255), (FADENKREUZ_X, FADENKREUZ_Y - 16), ( FADENKREUZ_X, FADENKREUZ_Y -5), 1)
 
             ship_list_target_sorted = [x for x in ship_list if x.object_id != global_target_object_id] + [x for x in ship_list if x.object_id == global_target_object_id]
             

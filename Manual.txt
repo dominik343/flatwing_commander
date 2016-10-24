@@ -17,6 +17,10 @@ F		right
 
 Space 		fire guns 
 
+T 		select target 
+
+--- only a few ships are equipped with missile- or torpedolaunchers. - Launchers reload afeter 40 seconds --- 
+
 B 		fire dumbfire missile 
 C		fire heavy dumbfire missile 
 N 		fire radar guided missile  (at selected target) 
