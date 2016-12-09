@@ -44,6 +44,13 @@ test_variable = 2
 
 #########################################
 
+def rect_points (position, x_size, y_size):
+    point_1 = position
+    point_2 = vadd (position, (x_size,0))
+    point_3 = vadd (position, (x_size,y_size))
+    point_4 = vadd (position, (0,y_size))
+    return (point_1,point_2,point_3,point_4) 
+
 def success_box (position, colour, success, **wargs):
     if 'surface' in wargs: surface = wargs.get ('surface')
     else: surface = screen 

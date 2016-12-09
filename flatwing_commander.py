@@ -33,7 +33,17 @@
 ### version 162d    :: using numpad 1-3 for primary, secondary, tertiary guns works again
 ### version 162e    :: added descriptions to cannons
 ### version 162f    :: ship blinks while cloaking / decloaking
-### version 162g    :: solved bug: cloaked, cloaking and decloaking ships now properly cannot shoot missiles or torpedoes anymore. 
+### version 162g    :: solved bug: cloaked, cloaking and decloaking ships now properly cannot shoot missiles or torpedoes anymore.
+### version 162h    :: added in- game manual
+### version 162h ii :: solved: previous version accidentially deleted the "start_briefing_menu" function
+### version 162i    :: changed:     create_asteroid_field function: added option to create an empty area within the field /// to do: connect this to the create mission system
+### version 162j    :: changed asteroid field creation system: asteroids fields are now defined as a dictionary, which can be passed transparently to the create_asteroid_field function
+### version 162k    :: added manual entry : alt + q  > exit mission
+### version 163     :: solved mission 2 crash bug.
+### version 164     :: added: damaged engines and shield_generators now emmit sparks
+### version 165     :: added: ship definitions now can have "engine_ports": a list of postions where the engines are displayed  ( >None< means standart position behind the ship at ships length) 
+### version 166     :: added: "Krant" Medium Fighter
+### version 167     :: added: "Bloodfang" Superfighter
 ##############################      
 
 from __future__ import division
@@ -57,7 +67,7 @@ import Tkinter
 
 
 INCLUDE_IMAGES = 'no'
-DEBUG_MODE = 'no'
+DEBUG_MODE = 'no'   ### yes ;;; no 
 
 
 
@@ -344,16 +354,20 @@ SALTHI = {'name': 'salthi', 'movement': (70,70,2,170), 'sas': [[2,1,1,1],[2,1,1,
 
 
 DRAHLTI = {'name': 'drahlti', 'movement': (50,50,2,120), 'sas': [[6,4,4,4],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-2,-3), (-4,-2), (-4,0), (-3,2), (-1,3), (-1,1) ])], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'the Empire\' s standart light fighter. Has a lower turn rate than the hornet, but stronger shields.'}
-HORNET = {'name': 'hornet', 'movement': (50,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon',( (0,-4), (-2,-4), (-2,-5), (-3,-5), (-3,-4), (-6,-4), (-1,1), (-3,3), (0,6), (3,3), (1,1), (6,-4), (3,-4), (3,-5), (2,-5), (2,-4))  ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'The Federations standart light fighter ist fast and agile. Its Firepower is not impressive, but enough to get the job done.' }
-TIE = {'name': 'tie', 'movement': (30,30,1,50), 'sas': [[0.1,0.1,0.1,0.1],[0.5,0.5,0.5,0.5],[0.1],[0,0,0,0] ], 'guns':  [ (SF_LASER, 3, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-1,3), (-1, - 1),(-2,1), (-1,3), (1,3), (2,1), (1,-1), (1,-3)     )], 'hitbox':  ['standart', 2], 'turrets': [], 'ship_class': 'fighter' , 'decription': 'Micro- Fighter. These tiny spacecraft are just big enough to carry a pilot, engines, and a gun. Slow and fragile, only dangerous in great numbers.' }
+KRANT = {'name': 'krant', 'movement': (50,30,2,120), 'sas': [[10,4,8,4],[15,10,12,10],[20],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', complete_half_ship ( [ (0,-7),(-6,-5),(-8,-3),(-8,0),(-6,-2),(-3,-1),(-2,6),(-1,7),(-1,6),(0,2)               ])], 'hitbox':  ['standart', 6], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Medium Fighter. The armament is not impressive, but the Krant is hard to kill.', 'damage_threshold':4}
+BLOODFANG = {'name': 'bloodfang', 'movement': (70,40,2,170), 'sas': [[10,6,8,6],[15,10,12,10],[20],[0,0,0,0] ], 'guns':  [ (PARTICLE, 5, -2), (PARTICLE, 5, 2),(PARTICLE, 3, -3), (PARTICLE, 3, 3) ], 'missile_launchers': 2, 'graphics': ['polygon', complete_half_ship ( [ (-1,-5),(-3,-6),(-6,-4),(-6,-1),(-5,1),(-3,0),(-3,-2),(-1,-2),(-1,1),(-3,3),(-3,5),(-1,7)             ])], 'hitbox':  ['standart', 6], 'turrets': [], 'ship_class': 'fighter' , 'description': "Superfighter. Fast, well protected, superior armament. Expensive.", 'damage_threshold':4}
 
-RAPIER = {'name': 'rapier', 'movement': (55,60,2,150), 'sas': [[10,5,10,5],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1), (LASER, 5, 0) ], 'missile_launchers': 2, 'graphics': ['polygon', ( (-2,-6), (-2,-5), (-5,-5), (-3,-1),(-1,-1), (-1,2), (-3,2), (0,6), (3,2), (1,2), (1,-1), (3,-1), (5,-5), (2,-5), (2,-6)               )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'The Federations newest Heavy Fighter. The best Mix of Agility, Armament and Protection available.' }
+HORNET = {'name': 'hornet', 'movement': (50,60,2,150), 'sas': [[5,3,3,3],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1) ], 'missile_launchers': 0, 'graphics': ['polygon',( (0,-4), (-2,-4), (-2,-5), (-3,-5), (-3,-4), (-6,-4), (-1,1), (-3,3), (0,6), (3,3), (1,1), (6,-4), (3,-4), (3,-5), (2,-5), (2,-4))  ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'The Federations standart light fighter ist fast and agile. Its Firepower is not impressive, but enough to get the job done.' }
+TIE = {'name': 'tie', 'movement': (30,30,1,50), 'sas': [[0.1,0.1,0.1,0.1],[0.5,0.5,0.5,0.5],[0.1],[0,0,0,0] ], 'guns':  [ (SF_LASER, 3, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-1,3), (-1, - 1),(-2,1), (-1,3), (1,3), (2,1), (1,-1), (1,-3)     )], 'hitbox':  ['standart', 2], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Micro- Fighter. These tiny spacecraft are just big enough to carry a pilot, engines, and a gun. Slow and fragile, only dangerous in great numbers.' }
+
+RAPIER = {'name': 'rapier', 'movement': (60,60,2,150), 'sas': [[10,5,10,5],[4,3,3,3],[10],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1), (LASER, 5, 0) ], 'missile_launchers': 2, 'graphics': ['polygon', ( (-2,-6), (-2,-5), (-5,-5), (-3,-1),(-1,-1), (-1,2), (-3,2), (0,6), (3,2), (1,2), (1,-1), (3,-1), (5,-5), (2,-5), (2,-6)               )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'description': 'The Federations newest Heavy Fighter. The best Mix of Agility, Armament and Protection available.' }
 RAPIER_B = copy.deepcopy (RAPIER)
 RAPIER_B ['name'] = 'rapier B'
 
 RAPIER_B ['guns'] = [  (NEUTRON, 20, 0) ] 
 SABRE = {'name': 'sabre', 'movement': (40,40,2,100), 'sas': [[15,8,15,8],[10,10,10,10],[15],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1),(LASER, 7, -1), (LASER, 7, 1) ], 'missile_launchers': 2, 'torpedo_launchers': 1, 'graphics': ['polygon', (          (-4,-10),(-6,-9),(-6,-6),(-5,-4),(-3,-2),(-1,-1),(-1,1),(-2,5),(-2,7),(-1,10),(1,10),(2,7),(2,5),(1,1),(1,-1),(3,-2),(5,-4),(6,-6),(6,-9),(4,-10)        )], 'hitbox':  ['standart', 6], 'turrets': [{'guns': [(LASER,-1), (LASER, 1)],
                   'vertical_position': -3,
+                  'hit_points':5,                                                                                                                                                                                                                                                                                                                                                                                                                                                         
                   'horizontal_position': 0,
                   'alignment': 3.14,
                   'left_area': 1.57,
@@ -390,7 +404,7 @@ DEMON = {'name': 'demon', 'movement': (35,60,2,100), 'sas': [[5,2,2,2],[3,2,2,2]
 
 SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[8,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile launcher make up for it.' }
 
-JALTHI = {'name': 'jalthi', 'movement': (35,30,2,100), 'sas': [[15,10,10,10],[10,5,5,5],[6],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1),(LASER, 7, 1),(LASER, 7, -1),(LASER, 5, 2),(LASER, 5, -2) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-4,-5), (-7,0), (-5,3), (-5,6), (-4,6), (-4,3), (-3,3), (-2,2), (-2,5), (-1,5), (-1,2), (1,2), (1,5), (2,5), (2,2), (3,3), (4,3), (4,6), (5,6), (5,3), (7,0), (4,-5)                   )], 'hitbox':  ['standart', 5], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Heavy Fighter. Its six laser cannons can take on any fighter head-on, but once the enemy gets behind, the Jalthi is screwed'}
+JALTHI = {'name': 'jalthi', 'movement': (35,30,2,100), 'sas': [[15,10,10,10],[10,5,5,5],[8],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1),(LASER, 7, 1),(LASER, 7, -1),(LASER, 5, 2),(LASER, 5, -2) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-4,-5), (-7,0), (-5,3), (-5,6), (-4,6), (-4,3), (-3,3), (-2,2), (-2,5), (-1,5), (-1,2), (1,2), (1,5), (2,5), (2,2), (3,3), (4,3), (4,6), (5,6), (5,3), (7,0), (4,-5)                   )], 'hitbox':  ['standart', 5], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Heavy Fighter. Its six laser cannons can take any fighter head-on, but once the enemy gets behind, the Jalthi is screwed.'}
 
 HAMMERHEAD = {'name': 'hammerhead',
               'movement': (50,60,2,150),
@@ -405,7 +419,8 @@ HAMMERHEAD = {'name': 'hammerhead',
                            'left_area': 3.14,
                            'right_area': 3.14,
                             'hit_points': 4}],
-              'ship_class': 'fighter' }
+              'ship_class': 'fighter',
+              'description':'The hammerhead features a gun turret that can fire in any direction.'}
 
 DEADMAN =   {'name': 'deadman',
               'movement': (10,1,1,0),
@@ -453,7 +468,8 @@ MORONIR =   {'name': 'moronir',
              'special_hit_boxes': [
                  [ 'nonstandart', 12,[ [ (-10, -5), (-10,5), (10,5), (10,-5) ]],  10, 'ship_destroyed', 'exists',[ (-9, -5), (-9,5), (-3, 5), (-3, 8), (3,8), (3,5),  (9,5), (9,-5) ]  ] #  0: standart (circle) vs nonstandart (box);;; 1: radius ;;; 2: box points ;;; 3: hit points ;;; 4: effect ;;; 5: exists or is it already destroyed ? 
                  ],
-              'ship_class': 'light_capital' }
+              'ship_class': 'light_capital',
+             'engine_ports':[(-31,-16),(-31,16)]}
 
 
 
@@ -595,7 +611,8 @@ DRAGON = { 'name': 'dragon',
              'hitbox': ['standart', 10],
              'graphics': ['polygon', complete_half_ship ([ (-4,-8),(-4,-10),(-9,-10),(-12,-8),(-12,-2),(-10,1),(-10,4),(-7,4),(-4,2),(-4,6),(-2,8)  ])],  ### (          (-4,-10),(-6,-9),(-6,-6),(-5,-4),(-3,-2),(-1,-1),(-1,1),(-2,5),(-2,7),(-1,10),(1,10),(2,7),(2,5),(1,1),(1,-1),(3,-2),(5,-4),(6,-6),(6,-9),(4,-10)        )
              'ship_class': 'bomber' ,
-           'description': 'Missile Boat'}
+           'description': 'Missile Boat',
+           'engine_ports':[(-10,-6),(-10,6)]}
 
 CHARYBDIS = { 'name': 'charybdis',
              'movement':(20,20,1,80),
@@ -656,7 +673,7 @@ fed_corvettes = [SABRE, BROADAXE, CHARYBDIS, SHRIKE, DRAGON]
 fed_civs = [DEADMAN]
 
 empire_cap_ships = [RALARI,FRALTHI, SIVAR]
-empire_fighters = [JALTHI,DRAHLTI,STRAKHA,STRAKHA_N, TIE, SALTHI]
+empire_fighters = [JALTHI,DRAHLTI,KRANT,STRAKHA,STRAKHA_N, TIE, SALTHI, BLOODFANG]
 empire_corvettes = [SCYLLA] 
 empire_civs = [MORONIR]
 
@@ -674,7 +691,7 @@ promotion_points = 0
 promotion_point_matrix = {'failure': -2, 'basic': 1, 'bronze': 2, 'silver': 4, 'gold': 6 } 
 rank = 'Flight Officer'
 
-rank_list = ['Flight Officer', 'Second Lieutenant', 'First Lieutenant' ]
+rank_list = ['Flight Officer', 'Second Lieutenant', 'First Lieutenant', 'Captain' ]
 
 rank_dict = {
     'Flight Officer': {
@@ -694,6 +711,12 @@ rank_dict = {
         'points_required': 4,
         'wingmen': 2,
         'ships': [HORNET, SCIMITAR, RAPTOR, RAPIER, SABRE ]
+        },
+    'Captain': {
+        'level':3,
+        'points_required': 6,
+        'wingmen':4,
+        'ships':[HORNET, SCIMITAR, RAPTOR, RAPIER, SABRE, HAMMERHEAD, BROADAXE ]
         }
     }
     
@@ -1324,6 +1347,7 @@ class debris (object):
         self.speed = speed
         self.direction = direction
         self.life_timer = 300
+        if "life_timer" in wargs: self.life_timer = wargs ["life_timer"]
         self.graphics = DEBRIS_GRAPHICS_LIST [random.randint (0, len (DEBRIS_GRAPHICS_LIST) - 1 ) ]
         debris_list.append (self)
         self.vertical_direction = dfunctions.aa ( self.direction, 1.57 * random.uniform (1,3) )
@@ -1357,11 +1381,13 @@ class debris (object):
         x,y = self.position
         x = x + self.speed * math.sin (self.direction) / 30 
         y = y + self.speed * math.cos (self.direction) / 30
-        
+
+        '''
         if self.vertical_speed_timer > 0:
             self.vertical_speed_timer -= 1
             x += self.vertical_speed * math.sin (self.vertical_direction) / 30
-            y += self.vertical_speed * math.cos (self.vertical_direction ) / 30 
+            y += self.vertical_speed * math.cos (self.vertical_direction ) / 30
+        '''
         
         self.position = x,y
        
@@ -2829,7 +2855,8 @@ class ship (object):
         self.autopilot_destination = xget (self.complete_information, 'autopilot_destination') 
    
         self.position = wargs ['position']
-        self.direction = ( 1.57 if wargs.get ('direction') == None else wargs ['direction'] ) 
+        self.direction = ( 1.57 if wargs.get ('direction') == None else wargs ['direction'] )
+        
         self.damage = 0
         self.death_delay = -1   ###     -1 = ship is healthy ## 0: destroy immediately   ### > 0 : death countdown
         self.player = wargs ['player']
@@ -2885,6 +2912,11 @@ class ship (object):
         self.hitbox = s_type.get ('hitbox')
        
         self.radius = self.hitbox [1]
+
+
+        self.engine_positions = dfunctions.fextrapolate_line (dfunctions.normalize_angle (self.direction + 3.14), self.position, 0, self.radius + 2) [1]
+        self.engine_ports = s_type.get ('engine_ports')
+        print 'test 550  ', self.engine_ports 
    
         
         self.missile_launchers = s_type.get ('missile_launchers')
@@ -3096,11 +3128,13 @@ class ship (object):
         
     ####################################################
     def update_stuff (self):
+        
         ###     I       initiates jumped-in flash 
         if self.just_jumped_in == 'yes':
             self.just_jumped_in = 'no'
             e = explosion ( 1, 40, colour = WHITE, position = (self.display_position if self.display_position != None else self.position))
             
+        
 
         
        
@@ -3784,6 +3818,11 @@ class ship (object):
         self.normalized_position = dfunctions.vadd (self.position, NEGATIVE_MIDDLE)
         self.radar_position = dfunctions.skalar_multi ( 1 / radar_factor, self.normalized_position)
         self.log_position = dfunctions.skalar_multi ( 1 / log_factor, self.normalized_position)
+
+
+        
+        
+        
     #######################################################################
 
 
@@ -3887,6 +3926,7 @@ class ship (object):
         
     ###################################################
     def update_direction (self,x):
+        destination_direction = None
 
 
         ######          I           move to destination
@@ -4028,7 +4068,7 @@ class ship (object):
                             
                         destination_direction = self.vorhalt_direction
 
-                
+                          
 
             if destination_direction != None:
         
@@ -4069,6 +4109,16 @@ class ship (object):
 
         self.shrink_factor = min (log_factor, max (1, self.radius / 5 ))
 
+        ##              A       determine engine_positions 
+        self.engine_positions = [] 
+        if self.engine_ports == None:
+            self.engine_positions.append (  dfunctions.fextrapolate_line (dfunctions.normalize_angle (self.direction + 3.14), self.display_position, 0, self.radius / self.shrink_factor + 2) [1])
+        else:
+            for p in self.engine_ports:
+                p1 = dfunctions.fextrapolate_line (self.direction, self.display_position, 0, p [0]) [1] 
+                p2 = dfunctions.forthogonal_line (p1, self.direction, p [1]) [1]
+                self.engine_positions.append (p2)
+                
         ###     II      do the graphics 
         self.ship_graphics ()
         self.graphics_small_stuff () 
@@ -4094,7 +4144,8 @@ class ship (object):
             pygame.draw.circle (screen, shield_colour, (int (self.display_position[0]), int (self.display_position [1])), self.radius + 7, 1)
 
         ###     III     engine graphics
-        if log_factor == 1:  dfunctions.display_engine_flame (self.display_position, dfunctions.aa (self.direction, 3.14), self.speed_mode )
+        for e in self.engine_positions:
+            if log_factor == 1:  dfunctions.display_engine_flame (e, dfunctions.aa (self.direction, 3.14), self.speed_mode )
 
         ###     IV      heat cone 
         if display_heat_cones == 1: dfunctions.display_missile_cone (self.display_position, dfunctions.aa (3.14, self.direction), self.heat_cone )
@@ -4107,7 +4158,15 @@ class ship (object):
 
         ###     VI      disabled 
         if self.disabled == 'yes':
-            write ('disabled', dfunctions.vadd (self.position, (- 20, - 25)), BRIGHT_BLUE, 12 ) 
+            write ('disabled', dfunctions.vadd (self.position, (- 20, - 25)), BRIGHT_BLUE, 12 )
+
+        ###     VII     damage sparks       (damaged engine and shield generator emit sparks)
+        if self.engine_damage >= self.damage_threshold:
+            for e in self.engine_positions:
+                if master_frame_counter % 30 == 0: debris (e,50,dfunctions.normalize_angle (self.direction +3.14), colour = ORANGE, life_timer = 60) ### (self, position, speed, direction, **wargs ):
+        if self.shield_generator_damage >= self.damage_threshold:
+            if master_frame_counter % 30 == 0: debris(self.position,30,dfunctions.normalize_angle (random.randint (1,6)), colour = (100,100,255), life_timer = 60)
+            
         
 
                 
@@ -4226,7 +4285,7 @@ class ship (object):
     
     # # Schieﬂ- Funktion: Erzeugt ein bullet- objekt
     def shoot (self, **wargs):
-        print 'test 600  ', self.cannons_sorted 
+        
         
         if self.stealthed_activation_timer <= 0 and self.stealthed_deactivation_timer <= 0 and self.stealthed != 'yes': 
             for e, can in enumerate (self.cannon_ids):
@@ -5054,17 +5113,44 @@ def create_fighter (input_stuff):
     # object_list
 
 
-def create_asteroid (position, seize):
+    
+
+def create_asteroid_field (**qwargs):
+    field_position = qwargs.get ("position")
+    # print 'test 80080  , position  ', 
+    number = qwargs.get ("number")
+    seize = qwargs.get ("seize") 
+    radius = int (seize / 2)
+    inner_empty_radius = 1
+    if "inner_empty_radius" in qwargs: inner_empty_radius = qwargs ["inner_empty_radius"]
+    if inner_empty_radius > (radius - 10): raise ValueError ("inner_empty_radius is (nearly) as large as field radius") 
+    
+    def random_neg (): # returns 1 or -1 at random 
+        out = random.randint (0,1)
+        if out == 0: out = -1
+        return out 
+    ###########################
+
+    def check_within_radius (position, radius): ### takes a vector and checks if its within a radius of (0,0)
+        out = False
+        if (abs (position [0]) < radius) and (abs (position [1]) < radius) : out = True
+
+        return out 
         
-
-    asteroid (position, seize) 
     
-    
+    for i in range (0,number):
 
-def create_asteroid_field (position, number, seize):
-    position = dfunctions.vadd (position, ( - int (seize / 2), - int (seize / 2))) 
-    for i in range (0, number):
-        create_asteroid ( dfunctions.vadd (position,(random.randint (1,seize), random.randint (1,seize))), random.randint (3,10))
+        run_loop = True
+        while run_loop == True:
+            
+            asteroid_relative_position = random_neg () * random.randint (1, radius) , random_neg () * random.randint (1,radius)
+            if check_within_radius (asteroid_relative_position, inner_empty_radius) == False:
+                run_loop = False 
+        
+        
+        asteroid_absolute_position = dfunctions.vadd (field_position, asteroid_relative_position)
+        asteroid_size = random.randint (3,10) 
+        asteroid (asteroid_absolute_position, asteroid_size)
 
 
 
@@ -5092,8 +5178,9 @@ def create_mission (mission, custom_or_campaign):
     asteroids = running_mission_info.get ('asteroid_fields')
     if asteroids != None:
         for a in asteroids:
+            
       
-            create_asteroid_field (a [0], a [1] , a [2])
+            create_asteroid_field (**a)
 
     global mission_running
     mission_running = {'campaign': 1, 'custom': 2} [custom_or_campaign]      ###  Values for "mission_running":   0 = no  ;; 1 = campaign_mission  ;; 2 = custom_mission 
@@ -5207,8 +5294,8 @@ campaign_mission_1 = {
         ['We have a little party going on in the rec room. Two of the other rookies have made their first kills. You have got my official permission to get trashed.', []]
         ],
     'asteroid_fields': [
-        [ (2000,500), 100, 500 ],  # position, number, field seize
-        [ (1500, 3500),80, 400 ]
+            {"position": (2000,500), "number": 100, "seize": 500, "inner_empty_radius": 50},
+            {"position": (1500,3500), "number":80, "seize": 400}
         ]
     }
 
@@ -5304,11 +5391,10 @@ campaign_mission_3 = {
             'position': (5000,2000),
             'mission_id': 2,
             'ships' : [
-                [0, TALON, (1000,500), 1, {'direction': 4.57, 'mission_id': 12}],
-                [0, TALON, (1000,700), 1, {'direction': 4.57, 'mission_id': 13}],
-                [0, SMALL_SUPPLY_DEPOT, dfunctions.vadd (MIDDLE, (50,50)), 1, {'speed_mode': 'off', 'direction': 4.57, 'mission_id': 14}],
-                [0, LASER_MINE, dfunctions.vadd (MIDDLE, (50,0)), 1, {'speed_setting': 'off','direction': 4.57, 'mission_id': 18}],
-                [0, LASER_MINE, dfunctions.vadd (MIDDLE, (50, 100)), 1, {'speed_setting': 'off', 'direction': 4.57, 'mission_id': 17}]
+                [0, TALON, (2000,500), 1, {'direction': 4.57, 'mission_id': 12}],
+                [0, TALON, (2000,700), 1, {'direction': 4.57, 'mission_id': 13}],
+                [0, SMALL_SUPPLY_DEPOT, dfunctions.vadd (MIDDLE, (50,50)), 1, {'speed_mode': 'off', 'direction': 4.57, 'mission_id': 14}]
+                
                 
                 ]
             },
@@ -5361,9 +5447,9 @@ campaign_mission_3 = {
        
         ],
     'asteroid_fields': [
-        [ (3000, 500), 100, 400],
-        [ (5000,2000), 80, 300],
-        [ (2500, 4000), 120, 400] 
+        {"position": (3000,500), "number": 100, "seize": 400}, # (3000, 500), 100, 400], 
+        {"position": (5000,2000), "number": 80, "seize": 300, "inner_empty_radius": 60},# (5000,2000), 80, 300],
+        {"position": (2500,4000), "number": 120, "seize": 400} # (2500, 4000), 120, 400] 
         ]
     }
 
@@ -5500,8 +5586,8 @@ campaign_mission_5 = {
         ['You let them escape. Now they can start their business somewhere else. A, well, the next batch of rookies needs some sparring partners, too.', [    ['goal_id',1, 'no'       ]         ]]
         ],
     'asteroid_fields': [
-        [ (2000,500), 100, 500 ],  # position, number, field seize
-        [ (1500, 3500),80, 400 ]
+        {"position": (2000,500), "number": 100, "seize": 500}, 
+        {"position": (1500,3500), "number": 80, "seize": 400} 
         ]
     }
 
@@ -6586,8 +6672,7 @@ while running_outer:
             display_button = Tkinter.Button (slave_frame, text = 'display', border = 4, relief = 'raised', command = display_command)
             display_button.pack ()
 
-
-         
+        
     def create_between_missions_menu ():
         global frame_0_a
 
@@ -6625,7 +6710,6 @@ while running_outer:
         main_menu_button.pack (fill = 'x')
         save_game_button = Tkinter.Button (menu_frame, border = 3, relief = 'ridge', text = 'Save Game' )
         save_game_button.pack (fill = 'x')
-
 
     def create_briefing_menu ():
         global frame_0_a
@@ -6703,6 +6787,129 @@ while running_outer:
             
         mission_button = Tkinter.Button (frame_0_a, text = 'Start Mission', border = 10, fg = 'red', font = ("Helvetica", 30), command = lambda: start_command ())
         mission_button.pack (side = 'bottom', fill = 'x' )
+
+
+    '''
+    def create_between_missions_menu ():
+        global frame_0_a
+
+        # ship_list_list = add_none_to_list (split_into_sublists (ship_list, 10), 2) 
+        
+        
+
+        if frame_0_a != None:
+        
+
+            frame_0_a.pack_forget ()
+            frame_0_a.destroy ()
+
+        ###         A           Main Frame + Background 
+        frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
+        frame_0_a.pack (side = 'left')
+        frame_0_a.pack_propagate (0)
+
+        background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
+        background.place (x = 0, y = 0 )
+
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Pirate Campaign' , border = 10, bg = 'grey',  font=("Helvetica", 30))
+        title.pack (side = 'top', fill = 'x')
+
+        speech = Tkinter.Label (frame_0_a, relief = 'raised', border = 5,  text = 'Welcome Rookies! In the time- honored Navy tradition, you will test your skills against pirates: Bad pilots in outdated fighters. Those of you who survive this campaign will get the chance to prove themselves against the enemy.' , bg = 'grey',  font=("Helvetica", 14), wraplength = 400 )
+        speech.pack () 
+
+
+        mission_button = Tkinter.Button (frame_0_a, text = 'Next Mission', border = 10, fg = 'red', font = ("Helvetica", 30), command = lambda: create_briefing_menu ())
+        mission_button.pack (side = 'bottom', fill = 'x' )
+
+        menu_frame = bigframe (frame_0_a)
+        menu_frame.place (x = 0, y = 300)
+        main_menu_button = Tkinter.Button (menu_frame, border = 3, relief = 'ridge', text = 'Back to Main', command = lambda: create_menu_screen_2 (menu_dict ['MAIN_MENU']) )
+        main_menu_button.pack (fill = 'x')
+        save_game_button = Tkinter.Button (menu_frame, border = 3, relief = 'ridge', text = 'Save Game' )
+        save_game_button.pack (fill = 'x')
+    '''
+
+
+    def create_manual_screen ():
+        global frame_0_a
+
+        # ship_list_list = add_none_to_list (split_into_sublists (ship_list, 10), 2) 
+        
+        
+
+        if frame_0_a != None:
+        
+
+            frame_0_a.pack_forget ()
+            frame_0_a.destroy ()
+
+                ###         A           Main Frame + Background 
+        frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
+        frame_0_a.pack (side = 'left')
+        frame_0_a.pack_propagate (0)
+
+        background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
+        background.place (x = 0, y = 0 )
+
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Manual' , border = 10, bg = 'grey',  font=("Helvetica", 30))
+        title.pack (side = 'top', fill = 'x')
+        main_menu_button = Tkinter.Button (frame_0_a, border = 3, relief = 'ridge', text = 'Back to Main Menu', command = lambda: create_menu_screen_2 (menu_dict ['MAIN_MENU']) )
+        main_menu_button.pack (fill = 'x')
+
+
+        ###         B           Middle Frame
+
+        middle_frame = Tkinter.Frame (frame_0_a, border = 20, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' )
+        middle_frame.pack (fill = 'both', expand = 1 )
+
+        def construct_manual_element (key, text):
+            f = Tkinter.Frame (middle_frame, border = 3,  bg = ('yellow' if DEBUG_MODE == 'yes' else 'grey'))
+            f.pack (side = 'top', fill = 'x')
+            Tkinter.Label (f, text = key, anchor = 'nw', justify = 'left', width = 20,  bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'y')
+            Tkinter.Label (f, text = text, justify = 'left',  wraplength = 600, bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'x')
+
+     
+
+        Tkinter.Label (middle_frame, text = 'BASIC MOVEMENT', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
+        construct_manual_element ("A", "Left")
+        construct_manual_element ("F", "Right")
+        construct_manual_element ("S", "1/3 Left")
+        construct_manual_element ("D", "1/3 Right")
+        construct_manual_element ("1", 'Set Engine Mode to 1/3 Speed')
+        construct_manual_element ("2", "Set Engine Mode to 2/3 Speed !!! This setting has the highest maneuverability !!!") 
+        construct_manual_element ("3", "Set Engine Mode to Full Speed") 
+        construct_manual_element ("0", "Set Speed to 0")
+        construct_manual_element ("", 'Switching engine modes takes about 10 seconds. ') 
+        
+
+        Tkinter.Label (middle_frame, text = 'ADVANCED MANEUVERS', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
+        construct_manual_element ("TAB", 'Activate Afterburner.   Afterburner has 3 phases: Activation Phase, Acceleration Phase, Gliding Phase.  !!! YOU CANNOT MANEUVER IN ACTIVATION AND ACCELERATION PHASES !!! . In gliding phase, maneuverability is doubled.')
+        construct_manual_element ("E", "Activate Gliding Phase: For 15 seconds, you continue to move in the original direction, even if you turn. CONSUMES 1 ENERGY POINT")
+
+        Tkinter.Label (middle_frame, text = 'GUNS', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
+        construct_manual_element ("SPACE", "Fire all guns")
+        construct_manual_element ("Numpad 1", "Fire primary guns")
+        construct_manual_element ("Numpad 2", "Fire secondary guns")
+        construct_manual_element ("O", "Switch gun turrets to manual control")
+        construct_manual_element ("LEFT, RIGHT, DOWN", "Move and fire gun turrets. !!! Turrets will seem to move 360 degrees, but this is misleading. Most turrets have a restricted firing arc. !!!")
+        Tkinter.Label (middle_frame, text = 'MISSILES AND TORPEDOS', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
+        construct_manual_element ("", "!!! Only a few ships are equipped with missile launchers or torpedo launchers. A missile launcher can shoot a variety of missiles and reloads after 40 seconds. Uses no ammo. !!!")
+        construct_manual_element ("M", "Fire heat-seeking missile. Homes only from behind.")
+        construct_manual_element ("N", "Fire radar-guided missile")
+        construct_manual_element ("B", "Fire dumbfire missile")
+        construct_manual_element ("C", "Fire heavy dumfire missile. Slow, but powerful enough to kill corvettes")
+        construct_manual_element (",", "Fire micro-missile swarm. Fires 20 micro-missiles in a 30 degree cone.")
+        construct_manual_element (".", "Fire torpedo. Needs a TORPEDO launcher.")
+
+        
+        Tkinter.Label (middle_frame, text = 'OTHER', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
+        construct_manual_element ("ALT + Q", "End Mission / return to base")
+        construct_manual_element ("ALT + 0,1,2,... 9" , "Auto- Pilot to Nav Point 0,1,2, ... 9") 
+
+        
+
+
+    ###############################################################################################################################################
 
 
         
@@ -7508,7 +7715,8 @@ while running_outer:
                 {'text': 'custom mission', 'command': lambda : create_custom_mission_menu ()},
                 # {'text': 'load saved game', 'command': lambda: print_stuff ('placeholder_1') },
                 {'text': 'start campaign', 'command': lambda: create_between_missions_menu () },
-                {'text': 'Exit Game', 'command': lambda: exit_game () }
+                {'text': 'Exit Game', 'command': lambda: exit_game () },
+                {'text': 'Manual', 'command': lambda: create_manual_screen () }
                 ]
             },
         'TUTORIAL_MENU' : {
