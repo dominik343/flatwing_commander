@@ -44,6 +44,8 @@
 ### version 165     :: added: ship definitions now can have "engine_ports": a list of postions where the engines are displayed  ( >None< means standart position behind the ship at ships length) 
 ### version 166     :: added: "Krant" Medium Fighter
 ### version 167     :: added: "Bloodfang" Superfighter
+### version 168     :: added: numpad 1-9 now shift the screen position to the ship between middle and corners ;;; firing primary and secondary weapons moved to numpad 0 and del
+### version 169     :: solved crash bug (?): game would crash when all ships are destroyed  
 ##############################      
 
 from __future__ import division
@@ -93,8 +95,8 @@ try:
     SCREEN_X = user32.GetSystemMetrics (0)
     SCREEN_Y = user32.GetSystemMetrics (1) -50
 except:
-    SCREEN_X = 1500
-    SCREEN_Y = 1100
+    SCREEN_X = 1400
+    SCREEN_Y = 650
 
 
 
@@ -120,6 +122,23 @@ SCREEN_SPLIT_Y = 400
 LEFT_LIMIT = 1
 RIGHT_LIMIT = SCREEN_SPLIT
 MIDDLE = ( int (SCREEN_SPLIT / 2), int (SCREEN_Y / 2))
+
+UPPER_LEFT = (270,50)
+UPPER_MIDDLE = (MIDDLE [0], 50)
+UPPER_RIGHT = (SCREEN_X - 450, 50)
+
+MIDDLE_LEFT = (220,MIDDLE [1])
+MIDDLE_RIGHT = (SCREEN_X - 450, MIDDLE [1])
+
+LOWER_LEFT = (270, SCREEN_Y -20)
+LOWER_MIDDLE = (MIDDLE [0], SCREEN_Y - 20)
+LOWER_RIGHT = (SCREEN_X - 450, SCREEN_Y - 20)
+
+ship_screen_middle = MIDDLE #   where is the ship displayed on the screen: MIDDLE or one of the above corners 
+
+# [UPPER_LEFT, UPPER_MIDDLE, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, LOWER_MIDDLE, LOWER_RIGHT ]
+
+
 NEGATIVE_MIDDLE = dfunctions.skalar_multi (-1, MIDDLE)
 SECOND_MIDDLE = ( int (( SCREEN_X + SCREEN_SPLIT) / 2), int ( SCREEN_Y / 2) )
 SECOND_MIDDLE = ( int (( SCREEN_X + SCREEN_SPLIT) / 2), 200) 
@@ -198,6 +217,7 @@ manual_turrets = 'no'    ### if 'yes': player controls his turrets manually
 persistant_dot_list = []
 mission_goal_results = {}
 success_level = None
+screen_shift = (0,0)
 
 
 
@@ -5157,6 +5177,8 @@ def create_asteroid_field (**qwargs):
         
 
 def create_mission (mission, custom_or_campaign):
+    global ship_screen_middle 
+    ship_screen_middle = MIDDLE   ### where is the player ship displayed on the screen: Middle or corners 
     global running_mission_info
     running_mission_info = mission 
     ships = mission.get ('ships')
@@ -5793,6 +5815,10 @@ def mainloop ():
        
 
         screen.fill((0, 0, 0))
+        '''
+        for item in [UPPER_LEFT, UPPER_MIDDLE, UPPER_RIGHT, MIDDLE_LEFT, MIDDLE_RIGHT, LOWER_LEFT, LOWER_MIDDLE, LOWER_RIGHT ]:
+            dot (item)
+        ''' 
 
         for d in persistant_dot_list [:]:
             dot ( d [0], colour = d [1])
@@ -5829,7 +5855,9 @@ def mainloop ():
         master_frame_counter += 1
          
         key_selected = 0 ### 0 = no key has been used yet
-        adjustment = 0 
+        adjustment = 0
+        global screen_shift
+        screen_shift = (0,0) 
         r = 0
         fire = 0
         ai_fire = 0
@@ -5960,12 +5988,26 @@ def mainloop ():
 
 
                 #
-                
+                '''
                 if event.key == 60:     ###         <
                     
                     
                     adjustment = MIDDLE [0] - 220
                     if pressed [306] == 1: adjustment = - ( MIDDLE [0] - 220 )
+                '''
+
+                if event.key in [257,258,259,260,261,262,263,264,265]:
+                    screen_shift_key_dict = {257:LOWER_LEFT, 258:LOWER_MIDDLE, 259: LOWER_RIGHT,
+                                             260:MIDDLE_LEFT, 261: MIDDLE, 262: MIDDLE_RIGHT,
+                                             263:UPPER_LEFT, 264: UPPER_MIDDLE, 265: UPPER_RIGHT}
+                    global ship_screen_middle
+                    global screen_shift
+
+                    screen_shift = vadd (screen_shift_key_dict [event.key], skalar_multi (-1, ship_screen_middle))
+                    ship_screen_middle = screen_shift_key_dict [event.key]
+                    recreate_stars = 'yes' 
+                    
+                   
 
         elif event.type == pygame.JOYBUTTONDOWN:
             print 'test 5000 ', event.button
@@ -6144,6 +6186,7 @@ def mainloop ():
                 x,y = ship.output_position (sh)
                 ship_list.remove (sh)
                 
+                
                 if sh.mission_id != None :
                     print 'test 370   '
                     mission_event_list.append ([ship.output_mission_id (sh), 'destroyed', sh.name, sh.kill_value, sh.team] )
@@ -6155,6 +6198,10 @@ def mainloop ():
                 if sh.ship_class == 'light_capital': debris_count = 100 
                 for i in range (0,debris_count):
                     d = debris  ((x,y), 100, 1.57 * random.uniform (0,4) )
+
+                if len (ship_list) == 0:
+                    pygame.display.quit ()
+                    
                 
                 # (2) gegner- Schiffe: keine richtungsänderung
             if ship.output_player (sh) == 0:
@@ -6174,9 +6221,8 @@ def mainloop ():
                 if fire_missile_4 == 1: ship.shoot_missile (sh, DUMB_DELAYED)
                 if fire_missile_5 == 1: ship.shoot_missile (sh, HEAVY_DUMB)
                 if keydown [44] == 1: ship.shoot_missile (sh, MICRO)
-                if pressed [257] == 1: sh.shoot (guns = 'primary')
-                if pressed [258] == 1: sh.shoot (guns = 'secondary')
-                if pressed [259] == 1: sh.shoot (guns = 'tertiary')
+                if pressed [256] == 1: sh.shoot (guns = 'primary')
+                if pressed [266] == 1: sh.shoot (guns = 'secondary')
                 if joystick == 'yes':
                     #if joy_1.get_button (1) == 1: sh.shoot_missile ( DUMBFIRE)
                     #if joy_1.get_button (2) == 1: sh.shoot_missile ( HEAVY_DUMB) 
@@ -6186,7 +6232,7 @@ def mainloop ():
             ship.update_direction (sh,r)
             ship.update_position (sh)
             if ship.output_player (sh) == 1:
-                position_adjustment = dfunctions.vadd (dfunctions.skalar_multi ( -1, ship.output_moved (sh)) , ( -adjustment, 0)) 
+                position_adjustment = dfunctions.vadd (dfunctions.skalar_multi ( -1, ship.output_moved (sh)) , screen_shift) 
                 # write (position_adjustment , (100,300), BLUE, 15)
                 if autopilot_destination != None:
 
@@ -6261,7 +6307,8 @@ def mainloop ():
                     
                     if ship.output_player (sh) == 1:  ship.graphics (sh)
                     if ship.output_player (sh) == 0:
-                        if sh in (ship.output_ships_on_radar ( ship_list [0] )) : ship.graphics (sh)
+                        if len (ship_list) > 0: # check should solve a crash bug 
+                            if  sh in (ship.output_ships_on_radar ( ship_list [0] )) : ship.graphics (sh)
             if ship.output_player (sh) == 0: ship.trigger (sh)
                # erzeugen von Schüssen
             if fire == 1: ship.shoot (sh)
@@ -6390,7 +6437,7 @@ def mainloop ():
 
             
                 
-                #   Box
+                #   Box   
             relative_bearing = ship_list [0].return_relative_bearing_abs () [0]
             relative_bearing_direction = ship_list [0].return_relative_bearing_abs () [1]
             crosshairs_box_color = WHITE
@@ -6888,8 +6935,8 @@ while running_outer:
 
         Tkinter.Label (middle_frame, text = 'GUNS', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
         construct_manual_element ("SPACE", "Fire all guns")
-        construct_manual_element ("Numpad 1", "Fire primary guns")
-        construct_manual_element ("Numpad 2", "Fire secondary guns")
+        construct_manual_element ("Numpad 0", "Fire primary guns")
+        construct_manual_element ("Numpad del", "Fire secondary guns")
         construct_manual_element ("O", "Switch gun turrets to manual control")
         construct_manual_element ("LEFT, RIGHT, DOWN", "Move and fire gun turrets. !!! Turrets will seem to move 360 degrees, but this is misleading. Most turrets have a restricted firing arc. !!!")
         Tkinter.Label (middle_frame, text = 'MISSILES AND TORPEDOS', border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised').pack (side = 'top')
