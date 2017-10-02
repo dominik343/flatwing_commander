@@ -45,7 +45,9 @@
 ### version 166     :: added: "Krant" Medium Fighter
 ### version 167     :: added: "Bloodfang" Superfighter
 ### version 168     :: added: numpad 1-9 now shift the screen position to the ship between middle and corners ;;; firing primary and secondary weapons moved to numpad 0 and del
-### version 169     :: solved crash bug (?): game would crash when all ships are destroyed  
+### version 169     :: solved crash bug (?): game would crash when all ships are destroyed
+### version 169a    :: balance change: enhanced scimitar front shields to 15
+### version 170     :: solved crash bug: game would crash when firing radar or heatseeking missiles without enemy around; The launcher still is emptied, but now no missile fires.
 ##############################      
 
 from __future__ import division
@@ -300,10 +302,10 @@ FLAK = {'name': 'flak', 'range': 1500, 'velocity': 300, 'damage': 8, 'cooldown':
 
 
 ### Definition der Raketen und Torpedos
-HEAT_SEEKING = [ 'heatseeking', [110,50,10,1], RED, {'damage': 'm1' } ]
-RADAR = [ 'radar', [70,30,6,1], BLUE, {'damage': 'm1' } ]
-DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'damage': 'm1' , 'explosion_radius': 0}]
-DUMB_DELAYED = ['dumb_delayed', [60,0,1,15], ORANGE, {'damage': 'm1' , 'explosion_radius': 10} ]
+HEAT_SEEKING = [ 'heatseeking', [110,50,10,1], RED, {'damage': 'm1', 'targeting': 'The target needs to be in Front of the missile (90 degree cone) AND the missile needs to be behind the target (90 degree cone)  ', 'description': 'Very fast and maneuverable. Can only be fired from behind' } ]
+RADAR = [ 'radar', [70,30,6,1], BLUE, {'damage': 'm1','description':'The Radar- guided missile can be fired at any target in front of you, but it is slow and rather easy to evade.'   , 'targeting': 'Follows the target, as long as the target is in front of the missile ( 90 degree cone).'  } ]
+DUMBFIRE = [ 'dumbfire', [150,0,15,10], GREEN , {'description': 'Unguided. Very Fast.','targeting':'None', 'damage': 'm1' , 'explosion_radius': 0}]
+DUMB_DELAYED = ['dumb_delayed', [60,0,1,15], ORANGE, {'targeting': 'None', 'description': 'Slow and unguided, but powerful ennough to kill a corvette','damage': 'm1' , 'explosion_radius': 10} ]
 HEAVY_DUMB = [ 'heavy_dumb', [60,0,1,10], GOLD, {'damage': 'm2', 'explosion_radius': 1 } ] 
 MINE = [ 'mine', [0,0,10,0], YELLOW, {'damage': 'm1' }]
 DELAYED_EXPLOSION = [ 'delayed', [0,0,0,30], WHITE , {'damage': 'm1' }]
@@ -422,7 +424,7 @@ TEST = {'name': 'test', 'movement': (50,60,2,150), 'sas': [[500,300,300,300],[4,
 TALON = {'name': 'talon', 'movement': (50,40,2,120), 'sas': [[3,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (OLD_LASER, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', complete_half_ship ( [ (-3,-6),(-3,-3), (-1,-1), (-1,2), (-2,3), (-2,5), (-1,6) ]) ], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'kill_value': 300, 'description': 'Outdated. Fast, but poorly armed and protected'}
 DEMON = {'name': 'demon', 'movement': (35,60,2,100), 'sas': [[5,2,2,2],[3,2,2,2],[10],[0,0,0,0] ], 'guns':  [ (AK_80MM_20S, 5, 0) ], 'missile_launchers': 0, 'graphics': ['polygon', ((-4,-6), (-4,-5), (-8,-4), (-8,-2), (-5,-1), (-5,0), (-4,2), (-4,4), (-3,6), (-2,6), (-2,4), (2,4), (2,6), (3,6), (4,4), (4,2), (5,0), (5,-1), (8,-2), (8,-4), (4, -5), (4,-6) )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter' , 'damage_threshold': 2, 'description': 'Outdated. Slow, but more maneuverable than the Talon. The single gun carries only limited ammo'}
 
-SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[8,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile launcher make up for it.' }
+SCIMITAR = {'name': 'scimitar', 'movement': (40,40,2,120), 'sas': [[15,5,5,5],[8,6,6,6],[3],[0,0,0,0] ], 'guns':  [ (MASS, 5, -1), (MASS, 5, 1) ], 'missile_launchers': 1, 'graphics': ['polygon', ( (-4,-6), (-4,4), (-3,4), (-3,-3), (-2,-1), (-2,6), (-1,8), (1,8),(2,6),(2,-1),(3,-3), (3,4), (4,4), (4,-6)              )], 'hitbox':  ['standart', 4], 'turrets': [], 'ship_class': 'fighter', 'description': 'Medium Fighter. Slow and ungainly, but its powerful mass driver cannons and the missile launcher make up for it.' }
 
 JALTHI = {'name': 'jalthi', 'movement': (35,30,2,100), 'sas': [[15,10,10,10],[10,5,5,5],[8],[0,0,0,0] ], 'guns':  [ (LASER, 5, -1), (LASER, 5, 1),(LASER, 7, 1),(LASER, 7, -1),(LASER, 5, 2),(LASER, 5, -2) ], 'missile_launchers': 0, 'graphics': ['polygon', ( (-4,-5), (-7,0), (-5,3), (-5,6), (-4,6), (-4,3), (-3,3), (-2,2), (-2,5), (-1,5), (-1,2), (1,2), (1,5), (2,5), (2,2), (3,3), (4,3), (4,6), (5,6), (5,3), (7,0), (4,-5)                   )], 'hitbox':  ['standart', 5], 'turrets': [], 'ship_class': 'fighter' , 'description': 'Heavy Fighter. Its six laser cannons can take any fighter head-on, but once the enemy gets behind, the Jalthi is screwed.'}
 
@@ -484,7 +486,7 @@ MORONIR =   {'name': 'moronir',
                            'alignment': 4.7,
                            'left_area': 1.6,
                            'right_area': 1.6}],
-             'description': 'Well armed and armored for a civilian ship.',
+             'description': 'Well armed and armored for a civilian ship, but the Bridge is very vulnerable.',
              'special_hit_boxes': [
                  [ 'nonstandart', 12,[ [ (-10, -5), (-10,5), (10,5), (10,-5) ]],  10, 'ship_destroyed', 'exists',[ (-9, -5), (-9,5), (-3, 5), (-3, 8), (3,8), (3,5),  (9,5), (9,-5) ]  ] #  0: standart (circle) vs nonstandart (box);;; 1: radius ;;; 2: box points ;;; 3: hit points ;;; 4: effect ;;; 5: exists or is it already destroyed ? 
                  ],
@@ -665,7 +667,7 @@ RAPTOR_B = copy.deepcopy ( RAPTOR)
 RAPTOR_B ['name'] = 'raptor B' 
 RAPTOR_B ['guns'] = [ (MASS,5,1), (MASS, 5,-1), (MASS, 2,-2), (MASS, 2,2), (TACHYON,3,-3), (TACHYON, 3,3)]
 RAPTOR_B ['missile_launchers'] = 0 
-PSYCHO = { 'name': 'psycho', 'movement': (35,100,6,120), 'sas': [[30,1,1,1],[10,1,1,1],[3],[0,0,0,0] ],'guns': [ (NEUTRON,5,1), (NEUTRON,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)], 'missile_launchers': 0, 'graphics':[ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )], 'hitbox':['standart', 5], 'turrets': [], 'ship_class': 'fighter' }
+PSYCHO = { 'name': 'psycho', 'movement': (35,100,6,120), 'sas': [[30,1,1,1],[10,1,1,1],[3],[0,0,0,0] ],'guns': [ (NEUTRON,5,1), (NEUTRON,5,-1), (NEUTRON,3,1),(NEUTRON,3,-1)], 'missile_launchers': 0, 'graphics':[ 'polygon', (    (-1,-5), (-3,-4),(-5,-4), (-5,0),(-2,2), (-2,5), (-1,6), (1,6), (2,5), (2,2), (5,0), (5,-4),( 3,-4),(1,-5)         )], 'hitbox':['standart', 5], 'turrets': [], 'ship_class': 'fighter', "description": "The Name says it all, doesn't it?" }
 PSYCHO_B = copy.deepcopy (PSYCHO)
 PSYCHO_B ['name'] = 'psycho B'
 PSYCHO_B ['guns'] = [ (PLASMA,5,1), (PLASMA,5,-1), (PLASMA,3,1),(PLASMA,3,-1)]
@@ -980,17 +982,6 @@ def add_frame_2 (old_frame,border,colour):
     return new_frame 
     
             
-            
-            
-
-
-
-
-
-
-
-
-
 
 def vadd (vector_1, vector_2):   ### addiert vektoren beliebiger länge 
     l_1 = list (vector_1)
@@ -1010,7 +1001,7 @@ def vsub (vector_1, vector_2):
 
 
 
-# @accepts ( ['tuple', 'list'])
+
 
 def dot (position, **wargs):
     colour = wargs.get ('colour')
@@ -1446,8 +1437,9 @@ class display_stuff_class (object):
         if 'colour' in wargs: self.colour = wargs ['colour'] 
         self.information = [[],[]]
         self.function = function
-        self.border = 10
-        if 'border' in wargs: self.border = wargs ['border'] 
+        self.border = (10 if 'border' not in wargs else wargs ['border'])
+        print "test 401040   ", self.border
+        
 
     def update (self, new_args, new_wargs, **wargs):
         new_stuff = new_args + new_wargs.values ()
@@ -1458,8 +1450,9 @@ class display_stuff_class (object):
         self.information = self.information [:2]
         if self.information [0] != self.information [1]:
 
-            if self.border != 0: function_2 = add_frame (self.border, dfunctions.darken_colour (self.colour)) (self.function)
+            if self.border != 0: function_2 = add_frame (self.border, dfunctions.darken_colour (self.colour) ) (self.function)
             else: function_2 = self.function
+            #function_2 = self.function
  
             # new_wargs.update ({'expand_x' : self.x})
             result = function_2 ((0,0),*new_args , **new_wargs)
@@ -1955,8 +1948,8 @@ class window_7 (window): # missiles and torpedos
 class window_8 (window): # killed ships list  
 
     def second_init (self):
-        self.x_seize = 150
-        self.y_seize = 300
+        self.x_seize = 800
+        self.y_seize = 20
         self.position = (251,0)
         self.outer_border = 2 
         self.k = display_stuff_class (dfunctions.display_killed_ships, colour = MAGENTA, border = self.outer_border  )# killed = dfunctions.display_killed_ships ( killed_ship_list, 300, WHITE)
@@ -1974,11 +1967,11 @@ class window_8 (window): # killed ships list
         if mission_running in [1,2]:
 
            
-            self.k.update ([ killed_ship_list, 300, WHITE], {})
+            self.k.update ([ killed_ship_list, self.x_seize, WHITE], {})
 
            
             
-            frame = pygame.Surface ( (500,20)) 
+            frame = pygame.Surface ( (self.x_seize,20)) 
             frame.fill (BLACK)
             frame.blit (self.k.picture, (0,0)) 
 
@@ -3357,6 +3350,8 @@ class ship (object):
     ############################################################
     def display_stuff_if_player (self):
         if self.player == 1:
+
+            dfunctions.display_killed_ships ((200,200), killed_ship_list, 200, BLUE)
        
 
             
@@ -4334,11 +4329,14 @@ class ship (object):
             
     # # raketen - Funktion
     def shoot_missile (self,m_type):
+        
+        
         if self.stealthed_activation_timer <= 0 and self.stealthed_deactivation_timer <= 0 and self.stealthed != 'yes':
             if ship.missile_cooldown (self) == 1:
+                
                 global target_count
                 global enemy_ship_list
-                if self.player == 1:
+                if self.player == 1:         
                     if enemy_ship_list != []:
                         self.target_object_id = ship.output_object_id (enemy_ship_list [target_count])
                     else: self.target_object_id = None 
@@ -4347,14 +4345,16 @@ class ship (object):
                     self.micro_missile_counter.append (20) 
                     
                 else:
-                    m = missile (m_type, self.target_object_id, self.direction, self.speed, self.object_id)
-                    x,y = self.position
-                    x1 = math.sin (self.direction)
-                    y1 = math.cos (self.direction)
-                    missile.set_missile_vorhalt (m, self.missile_vorhalt)
-                    if m_type [0] == 'mine': missile.set_position (m, x - 12 * x1, y -12 * y1)
-                    else: missile.set_position (m, x +35 * x1,y + 35 * y1)
-                    missile_list.append (m)
+                    if self.target_object_id != None or m_type [0] not in ["radar", "heatseeking"]:
+                        m = missile (m_type, self.target_object_id, self.direction, self.speed, self.object_id)
+                        x,y = self.position
+                        x1 = math.sin (self.direction)
+                        y1 = math.cos (self.direction)
+                        missile.set_missile_vorhalt (m, self.missile_vorhalt)
+                        if m_type [0] == 'mine': missile.set_position (m, x - 12 * x1, y -12 * y1)
+                        else: missile.set_position (m, x +35 * x1,y + 35 * y1)
+                        missile_list.append (m)
+                    
 
     def shoot_torpedo (self):
         m_type = TORPEDO
@@ -6959,6 +6959,169 @@ while running_outer:
     ###############################################################################################################################################
 
 
+    def create_weapons_screen_page_1 ():
+        global frame_0_a
+
+        if frame_0_a != None:
+        
+
+            frame_0_a.pack_forget ()
+            frame_0_a.destroy ()
+
+                ###         A           Main Frame + Background 
+        frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
+        frame_0_a.pack (side = 'left')
+        frame_0_a.pack_propagate (0)
+
+        background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
+        background.place (x = 0, y = 0 )
+
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Weapons' , border = 10, bg = 'grey',  font=("Helvetica", 30))
+        title.pack (side = 'top', fill = 'x')
+               
+        page_2_button = Tkinter.Button (title ,relief = 'raised', border = 4, fg = "red", text = 'Next Page' , bg = 'grey',  font=("Helvetica", 14), command = lambda: create_weapons_screen_page_2 ())
+        page_2_button.pack (side = "right")
+        page_1 = Tkinter.Label (title ,relief = 'raised', text = 'Page 1 ' , bg = 'grey',  font=("Helvetica", 18) )
+        page_1.pack (side = "right")
+        main_menu_button = Tkinter.Button (frame_0_a, border = 3, fg = "red", relief = 'ridge', text = 'Back to Main Menu', command = lambda: create_menu_screen_2 (menu_dict ['MAIN_MENU']) )
+        main_menu_button.pack (fill = 'x')
+        Tkinter.Label (frame_0_a, text = "FIGHTER GUNS:", border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' , font=("Helvetica", 24)).pack (side = 'top')
+
+
+        ###         B           Middle Frame
+
+        middle_frame = Tkinter.Frame (frame_0_a, border = 20, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' )
+        middle_frame.pack (fill = 'both', expand = 1 )
+        middle_left = Tkinter.Frame (middle_frame, border = 0, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'ridge' )
+        middle_left.pack (side='left',fill='y')
+        middle_right = Tkinter.Frame (middle_frame, border = 0, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'ridge' )
+        middle_right.pack (side='left',fill='y')
+        
+
+        def construct_gun_element (gun, parent):
+            f = Tkinter.Frame (parent, border = 3, relief = "ridge",  bg = ('yellow' if DEBUG_MODE == 'yes' else 'grey'))
+            f.pack (side = 'top', fill = 'x')
+            Tkinter.Label (f, text = gun ['name'],  bg = ('red' if DEBUG_MODE == 'yes' else '#A0A0FF')).pack (side = 'top', fill = 'x')
+
+            def construct_gun_entry (key, value):
+                g = Tkinter.Frame (f, border = 3,  bg = ('yellow' if DEBUG_MODE == 'yes' else 'grey'))
+                g.pack (side = 'top', fill = 'x')
+                Tkinter.Label (g, text = key, anchor = 'nw', justify = 'left', width = 20,  bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'y')
+                Tkinter.Label (g, text = value , justify = 'left',  wraplength = 200, bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'x')
+
+            
+            for key in [ 'description', 'damage', 'range', 'cooldown', 'maximum_load', 'velocity']:
+                construct_gun_entry (key, gun [key])
+
+
+            
+            Tkinter.Label (middle_frame, text = '',  bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'top', fill = 'x')
+            
+           
+
+     
+
+
+        for gun in [LASER, MASS, NEUTRON]:  
+            construct_gun_element (gun, middle_left)
+
+        for gun in [PARTICLE, STARFIRE, PLASMA]:
+            construct_gun_element (gun, middle_right)
+
+
+    ###############################################################################################################################################
+
+
+    def create_weapons_screen_page_2 ():
+        global frame_0_a
+
+        if frame_0_a != None:
+        
+
+            frame_0_a.pack_forget ()
+            frame_0_a.destroy ()
+
+                ###         A           Main Frame + Background 
+        frame_0_a = Tkinter.Frame (outer_frame, bg = 'white', relief = 'ridge', width = 800, height = 1000 )
+        frame_0_a.pack (side = 'left')
+        frame_0_a.pack_propagate (0)
+
+        background = Tkinter.Label (frame_0_a, width = 800, height = 1000)
+        background.place (x = 0, y = 0 )
+
+        title = Tkinter.Label (frame_0_a,relief = 'raised', text = 'Weapons' , border = 10, bg = 'grey',  font=("Helvetica", 30))
+        title.pack (side = 'top', fill = 'x')
+        page_1_button = Tkinter.Button (title ,relief = 'raised', border = 4, fg = "red", text = 'Previous Page' , bg = 'grey',  font=("Helvetica", 14), command = lambda: create_weapons_screen_page_1 ())
+        page_1_button.pack (side = "left")
+               
+        page_2_button = Tkinter.Button (title ,relief = 'raised', border = 4, fg = "red", text = 'Next Page' , bg = 'grey',  font=("Helvetica", 14))
+        page_2_button.pack (side = "right")
+        page_2 = Tkinter.Label (title ,relief = 'raised', text = 'Page 2 ' , bg = 'grey',  font=("Helvetica", 18) )
+        page_2.pack (side = "right")
+        main_menu_button = Tkinter.Button (frame_0_a, border = 3, fg = "red", relief = 'ridge', text = 'Back to Main Menu', command = lambda: create_menu_screen_2 (menu_dict ['MAIN_MENU']) )
+        main_menu_button.pack (fill = 'x')
+        Tkinter.Label (frame_0_a, text = "MISSILES and TORPEDOS:", border = 3, bg = ('red' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' , font=("Helvetica", 24)).pack (side = 'top')
+
+
+        ###         B           Middle Frame
+
+        middle_frame = Tkinter.Frame (frame_0_a, border = 20, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'raised' )
+        middle_frame.pack (fill = 'both', expand = 1 )
+        middle_left = Tkinter.Frame (middle_frame, border = 0, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'ridge' )
+        middle_left.pack (side='left',fill='y')
+        middle_right = Tkinter.Frame (middle_frame, border = 0, bg = ('blue' if DEBUG_MODE == 'yes' else 'grey'), relief = 'ridge' )
+        middle_right.pack (side='left',fill='y')
+        
+
+        def construct_gun_element (gun, parent):
+            f = Tkinter.Frame (parent, border = 3, relief = "ridge",  bg = ('yellow' if DEBUG_MODE == 'yes' else 'grey'))
+            f.pack (side = 'top', fill = 'x')
+            Tkinter.Label (f, text = gun [0],  bg = ('red' if DEBUG_MODE == 'yes' else '#A0A0FF')).pack (side = 'top', fill = 'x')
+
+            def construct_gun_entry (key, value):
+                g = Tkinter.Frame (f, border = 3,  bg = ('yellow' if DEBUG_MODE == 'yes' else 'grey'))
+                g.pack (side = 'top', fill = 'x')
+                Tkinter.Label (g, text = key, anchor = 'nw', justify = 'left', width = 20,  bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'y')
+                Tkinter.Label (g, text = value , justify = 'left',  wraplength = 200, bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'left', fill = 'x')
+
+            
+            construct_gun_entry ('Description' , gun [3].get ('description') )
+            construct_gun_entry ('Targeting' , gun [3].get ('targeting') )
+            construct_gun_entry ('Velocity', gun [1] [0])
+            construct_gun_entry ('Turn Rate', gun [1] [1])
+
+            def turn_into_description (input_damage):
+                if input_damage == 'm1': return 'Light Missile Warhead:   Kills Fighters in a single hit. Does only minor damage to Corvettes.'
+                if input_damage == 'm2': return 'Heavy Missile Warhead:   Kills Corvettes in a single hit.'
+                if input_damage == 't1': return '1000'
+                else: return input_damage
+            construct_gun_entry ('Damage', turn_into_description (gun [3] ['damage']))
+
+
+
+            #       RADAR = [ 'radar', [70,30,6,1], BLUE, {'damage': 'm1' } ]
+            
+            
+
+
+            
+            Tkinter.Label (middle_frame, text = '',  bg = ('red' if DEBUG_MODE == 'yes' else 'grey')).pack (side = 'top', fill = 'x')
+            
+           
+
+     
+
+
+        for gun in [RADAR, HEAT_SEEKING, DUMBFIRE, HEAVY_DUMB]:  
+            construct_gun_element (gun, middle_left)
+
+        for gun in [PARTICLE, STARFIRE, PLASMA]:
+            construct_gun_element (gun, middle_right)
+
+
+    ###############################################################################################################################################
+
+
         
     def create_debriefing_menu ():
         global frame_0_a
@@ -7763,7 +7926,8 @@ while running_outer:
                 # {'text': 'load saved game', 'command': lambda: print_stuff ('placeholder_1') },
                 {'text': 'start campaign', 'command': lambda: create_between_missions_menu () },
                 {'text': 'Exit Game', 'command': lambda: exit_game () },
-                {'text': 'Manual', 'command': lambda: create_manual_screen () }
+                {'text': 'Manual', 'command': lambda: create_manual_screen () },
+                {'text': 'Weapons', 'command': lambda: create_weapons_screen_page_1 () }
                 ]
             },
         'TUTORIAL_MENU' : {

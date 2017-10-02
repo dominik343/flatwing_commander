@@ -1546,8 +1546,9 @@ def display_afterburner (position, activation, acceleration, gliding, cooldown, 
 
 
 ################################################################################################################
-def display_killed_ships (position, killed_ship_list, x_seize, back_colour):
-    frame = pygame.Surface ( (x_seize, 20 ))
+def display_killed_ships (position, killed_ship_list, x_seize, back_colour): 
+    
+    frame = pygame.Surface ( (x_seize, 20 )) ### changed !!! 500 instead of "x_seize" !!!
     frame.fill (back_colour)
     write_1b ( 'kills :  ',(10,2), GREEN, 12, surface = frame)
 
